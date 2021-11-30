@@ -12,7 +12,7 @@ function App() {
   const [user,setUser]=useState({});
     const login =async(email,password)=>{
         try{
-            const loginData = await axios.post("http://localhost:4000/login",{email:email,password:password})
+            const loginData = await axios.post("https://asad-zoom-look-alike-server.herokuapp.com/login",{email:email,password:password})
             setUser(loginData)
           setLogedIn(true)
         }catch(err){
