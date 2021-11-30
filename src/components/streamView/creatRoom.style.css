@@ -1,0 +1,10 @@
+.roomLink{
+    cursor: pointer; 
+}
+.roomLink:hover{
+    text-decoration: underline;
+    color: #555;
+}
+ul{
+    list-style: none;
+}
