@@ -14,6 +14,8 @@ function App() {
         try{
             const loginData = await axios.post("https://asad-zoom-look-alike-server.herokuapp.com/login",{email:email,password:password})
             setUser(loginData)
+            console.log(loginData);
+            localStorage.setItem("userAccessToken", JSON.stringify(loginData.data.accessToken))
           setLogedIn(true)
         }catch(err){
             console.log(err);
