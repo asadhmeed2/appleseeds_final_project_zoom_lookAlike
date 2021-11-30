@@ -1,4 +1,6 @@
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
+import axios from 'axios'
+import {useState} from 'react'
 import './App.css';
 import Room from './components/streamView/room.component';
 import Home from './components/home/home.component';
@@ -6,12 +8,23 @@ import Home from './components/home/home.component';
 
 
 function App() {
+  const [logedIn,setLogedIn]=useState(false)
+  const [user,setUser]=useState({});
+    const login =async(email,password)=>{
+        try{
+            const loginData = await axios.post("http://localhost:4000/login",{email:email,password:password})
+            setUser(loginData)
+          setLogedIn(true)
+        }catch(err){
+            console.log(err);
+        }
+    }
   return (
     <Router>
     <div className="App">
       <Routes>
-      <Route path="/" element={<Home/>}/>
-      <Route path="/room/:roomId" element={<Room/>}/>
+      <Route path="/" element={<Home login={login} logedIn={logedIn}/>}/>
+      <Route path="/room/:roomId" element={<Room user={user}/>}/>
         </Routes>
     </div>
     </Router>

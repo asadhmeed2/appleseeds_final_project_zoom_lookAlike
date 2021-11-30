@@ -21,10 +21,7 @@ const Room = () => {
     socketRef.current = socket;
 
     (()=>{navigator.mediaDevices
-      .getUserMedia({ video: {
-        width: { min: 1024, ideal: 1280, max: 1920 },
-        height: { min: 576, ideal: 720, max: 1080 }
-      }, audio: true })
+      .getUserMedia({ video: true, audio: true })
       .then((stream) => {
         userVideo.current.srcObject = stream;
         socketRef.current.emit("join room", roomID);

@@ -4,19 +4,16 @@ import  CreateRoom  from "../streamView/creatRoom.component";
 import Login from "../login/login.component"
 
 
-const Home=(props)=> {
-    const [logedIn,setLogedIn]=React.useState(true)
-    const login =async()=>{
-        
-    }
+const Home=({logedIn,login})=> {
+    
     return (
         <div>
             {
                 !logedIn?
-           <Login/>: 
+           <Login logIn={login}/>: 
            <>
            <h1>private video chat app</h1> 
-           <CreateRoom props={props}/>
+           <CreateRoom/>
            </>
 }
         </div>

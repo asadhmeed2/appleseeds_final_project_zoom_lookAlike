@@ -16,7 +16,7 @@ const LoginPage = ({logIn}) => {
         }else if((password=== "")){
             errorRef.current.innerHTML =`<span style={color="rad"}>password is required</span>`
         }
-        // logIn(email,password);
+         logIn(email,password);
     }
   return (
     <div style={{ padding: 30 }}>
