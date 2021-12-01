@@ -6,7 +6,9 @@ const Video = (props) => {
 
     useEffect(() => {
         props.peer.on("stream", stream => {
-            ref.current.srcObject = stream;
+            if(ref.current){
+                ref.current.srcObject = stream;
+            }
         })
     }, []);
 

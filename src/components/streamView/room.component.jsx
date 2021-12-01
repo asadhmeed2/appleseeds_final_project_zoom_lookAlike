@@ -16,38 +16,37 @@ const Room = () => {
   const [peers, setPeers] = useState([]);
   const socketRef = useRef();
   const userVideo = useRef();
+  const userIdRef=useRef();
   const peersRef = useRef([]);
   const roomID = params.roomID;
 
   useEffect(() => {
     socketRef.current = socket;
-    (()=>{
+    socket.open()
       const options ={
         headers:{'authorization':`bearer ${JSON.parse(localStorage.getItem('userAccessToken'))}` }
       }
     axios.get("http://localhost:4000/auth",options).then(response => {
-      console.log(response.data.uniqid);
-      (()=>{navigator.mediaDevices
+      navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
           userVideo.current.srcObject = stream;
-          socketRef.current.emit("join room", {roomID:roomID,uniqid:response.data.uniqid});
+          socketRef.current.emit("join room", {roomID,uniqueID:response.data.uniqid});
           socketRef.current.on("all users", (users) => {
-            console.log(users);
+            console.log('users',users);
             const peers = [];
-            users.forEach((userData) => {
-              const peer = createPeer(userData.id, socketRef.current.id, stream);
+            users.forEach((userID ) => {
+              const peer = createPeer(userID , socketRef.current.id, stream);
               peersRef.current.push({
-                peerID: userData.id,
+                peerID: userID ,
                 peer,
               });
               peers.push({
-                  peerID:userData.id,
+                  peerID:userID ,
                   peer: peer,
               });
             });
-            setPeers(peers);
-            localStorage.setItem("peers",JSON.stringify(peers));
+            setPeers(prev=>peers);
           });
   
           socketRef.current.on("user joined", (payload) => {
@@ -56,31 +55,37 @@ const Room = () => {
               peerID: payload.callerID,
               peer,
             });
-  
-            setPeers((users) => [...users, {peerID:payload.callerID,
-              peer: peer}]);
+            setPeers((users) => [...users, {peerID:payload.callerID,peer}]);
           });
           socketRef.current.on("user left", (id) => {
+            console.log(id);
             const peerObj = peersRef.current.find((p) => p.peerID === id);
             if (peerObj) {
               peerObj.peer.destroy();
             }
+            console.log("peersRef.current",peersRef.current);
             const peers = peersRef.current.filter((p) => p.peerID !== id);
-            peersRef.current=peers;
+            peersRef.current=[...peers];
+            console.log('peers',peersRef.current);
             setPeers(prvPeers=>peers)
           });
           socketRef.current.on("destroy all peers",()=>{
-            console.log(peersRef.current);
-            peersRef.current.forEach((peerData)=>{
-              peerData.peer.destroy();
+            
+             (peersRef.current).filter((p) =>{
+              p.destroy();
+              return false;
             })
             peersRef.current={};
-            setPeers(prvPeers=>{})
+            setPeers({})
           })
-          socketRef.current.on('forced logOut',()=>{
-            localStorage.removeItem('userAccessToken')
-            navigate('/')
-          })
+          // socketRef.current.on("already in the room",() => {
+          //   console.log('already in the room')
+          //   navigate('/')
+          // })
+          // socketRef.current.on('forced logOut',()=>{
+          //   localStorage.removeItem('userAccessToken')
+          //   navigate('/')
+          // })
           socketRef.current.on("receiving returned signal", (payload) => {
             const item = peersRef.current.find((p) => p.peerID === payload.id);
             if (!item) return;
@@ -89,13 +94,22 @@ const Room = () => {
         })
         .catch((err) => {
           console.log(err);
-        });})()
+        });
     }).catch(err => {
       navigate('/')
     })
-    })()
-    
-    return () => {};
+    return function cleanup() {
+      // const peerObj = peersRef.current.find((p) => p.peerID === socketRef.current.id);
+      // if (peerObj) {
+      //   peerObj.peer.destroy();
+      // }
+      // socketRef.current.emit("user got back to home" ,socketRef.current.id);
+      peersRef.current=[]
+      setPeers({})
+      socket.close();
+      
+      
+    }
   }, []);
 
   function createPeer(userToSignal, callerID, stream) {
@@ -130,7 +144,8 @@ const Room = () => {
   return (
     <div className="container">
       <video muted ref={userVideo} autoPlay playsInline />
-      {peers &&peers.map((peer, index) => {
+      {console.log(peers)}
+      {peers.map((peer) => {
         return <Video key={peer.peerID} peer={peer.peer} />;
       })}
     </div>

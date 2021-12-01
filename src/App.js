@@ -14,7 +14,6 @@ function App() {
         try{
             const loginData = await axios.post("http://localhost:4000/login",{email:email,password:password})
             setUser(loginData)
-            console.log(loginData);
             localStorage.setItem("userAccessToken", JSON.stringify(loginData.data.accessToken))
           setLogedIn(true)
         }catch(err){

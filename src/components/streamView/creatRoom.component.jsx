@@ -4,7 +4,7 @@ import { v1 as uuid } from "uuid";
 import axios from "axios";
 import "./creatRoom.style.css";
 import { io } from "socket.io-client";
-const socket = io("http://localhost:4000", { transports: ["websocket"] });
+const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
 const CreateRoom = () => {
   const navigate = useNavigate();
@@ -31,24 +31,26 @@ const CreateRoom = () => {
       .then((response) => {
         if (response.data.role === "admin") {
           const id = uuid();
+        //   navigate(`/room/${id}`);
           setRooms((perv) => [...rooms, { roomID: id, room: `/room/${id}` }]);
           socket.emit("room created", { roomID: id, roomLink: `/room/${id}` });
           socket.on("all rooms links", (roomsData) => {
             setRooms(Object.values(roomsData));
           });
         }
-      });
+      }
+      );
   };
   const removeRooms = () => {
-    socket.emit("remove all rooms");
-    socket.on("all rooms links", (roomsData) => {
-      setRooms(Object.values(roomsData));
-    });
+    // socket.emit("remove all rooms");
+    // socket.on("all rooms links", (roomsData) => {
+    //   setRooms(Object.values(roomsData));
+    // });
   };
   return (
     <>
       <ul>
-        {rooms &&
+        {
           rooms.map((roomData, index) => {
             return (
               <li
