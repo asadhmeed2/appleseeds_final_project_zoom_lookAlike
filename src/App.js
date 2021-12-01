@@ -12,7 +12,7 @@ function App() {
   const [user,setUser]=useState({});
     const login =async(email,password)=>{
         try{
-            const loginData = await axios.post("https://asad-zoom-look-alike-server.herokuapp.com/login",{email:email,password:password})
+            const loginData = await axios.post("http://localhost:4000/login",{email:email,password:password})
             setUser(loginData)
             console.log(loginData);
             localStorage.setItem("userAccessToken", JSON.stringify(loginData.data.accessToken))
@@ -25,7 +25,7 @@ function App() {
     <Router>
     <div className="App">
       <Routes>
-      <Route path="/" element={<Home login={login} logedIn={logedIn}/>}/>
+      <Route path="/" element={<Home login={login} setLogedIn={setLogedIn} logedIn={logedIn}/>}/>
       <Route path="/room/:roomId" element={<Room user={user}/>}/>
         </Routes>
     </div>

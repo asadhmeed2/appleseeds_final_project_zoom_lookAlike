@@ -25,23 +25,24 @@ const Room = () => {
       const options ={
         headers:{'authorization':`bearer ${JSON.parse(localStorage.getItem('userAccessToken'))}` }
       }
-    axios.get("https://asad-zoom-look-alike-server.herokuapp.com/auth",options).then(response => {
+    axios.get("http://localhost:4000/auth",options).then(response => {
+      console.log(response.data.uniqid);
       (()=>{navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
           userVideo.current.srcObject = stream;
-          socketRef.current.emit("join room", roomID);
+          socketRef.current.emit("join room", {roomID:roomID,uniqid:response.data.uniqid});
           socketRef.current.on("all users", (users) => {
             console.log(users);
             const peers = [];
-            users.forEach((userID) => {
-              const peer = createPeer(userID, socketRef.current.id, stream);
+            users.forEach((userData) => {
+              const peer = createPeer(userData.id, socketRef.current.id, stream);
               peersRef.current.push({
-                peerID: userID,
+                peerID: userData.id,
                 peer,
               });
               peers.push({
-                  peerID:userID,
+                  peerID:userData.id,
                   peer: peer,
               });
             });
@@ -68,7 +69,18 @@ const Room = () => {
             peersRef.current=peers;
             setPeers(prvPeers=>peers)
           });
-  
+          socketRef.current.on("destroy all peers",()=>{
+            console.log(peersRef.current);
+            peersRef.current.forEach((peerData)=>{
+              peerData.peer.destroy();
+            })
+            peersRef.current={};
+            setPeers(prvPeers=>{})
+          })
+          socketRef.current.on('forced logOut',()=>{
+            localStorage.removeItem('userAccessToken')
+            navigate('/')
+          })
           socketRef.current.on("receiving returned signal", (payload) => {
             const item = peersRef.current.find((p) => p.peerID === payload.id);
             if (!item) return;
@@ -118,7 +130,7 @@ const Room = () => {
   return (
     <div className="container">
       <video muted ref={userVideo} autoPlay playsInline />
-      {peers.map((peer, index) => {
+      {peers &&peers.map((peer, index) => {
         return <Video key={peer.peerID} peer={peer.peer} />;
       })}
     </div>
