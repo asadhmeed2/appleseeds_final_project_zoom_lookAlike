@@ -10,13 +10,17 @@ import { useParams } from "react-router-dom";
 import "./room.style.css";
 const socket = io("http://localhost:4000", { transports: ["websocket"] });
 
-const Room = () => {
+const Room = ({user}) => {
   const navigate =useNavigate();
   const params = useParams();
   const [peers, setPeers] = useState([]);
+  const [userUpdate, setUserUpdate] = useState([]);
+  const [myVideoFlag, setMyVideoFlag] = useState(true);
+  const [myAudioFlag, setMyAudioFlag] = useState(true);
   const socketRef = useRef();
   const userVideo = useRef();
-  const userIdRef=useRef();
+  const videoSream = useRef();
+  // const userIdRef=useRef();
   const peersRef = useRef([]);
   const roomID = params.roomID;
 
@@ -28,9 +32,24 @@ const Room = () => {
       }
     axios.get("http://localhost:4000/auth",options).then(response => {
       navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
+        .getUserMedia({ video: true, audio: false })
         .then((stream) => {
           userVideo.current.srcObject = stream;
+
+          // userVideo.current.onloadedmetadata = (metadata) => {
+          //   userVideo.current.play();
+          // }
+          // let mediaRecorder = new MediaRecorder(stream);
+          // videoSream.current =()=>{
+          //   if(myVideoFlag){
+          //     mediaRecorder.pause();
+          //   }else{
+          //     mediaRecorder.start();
+          //   }
+          // }
+
+
+
           socketRef.current.emit("join room", {roomID,uniqueID:response.data.uniqid});
           socketRef.current.on("all users", (users) => {
             console.log('users',users);
@@ -66,30 +85,16 @@ const Room = () => {
             console.log("peersRef.current",peersRef.current);
             const peers = peersRef.current.filter((p) => p.peerID !== id);
             peersRef.current=[...peers];
-            console.log('peers',peersRef.current);
             setPeers(prvPeers=>peers)
           });
-          socketRef.current.on("destroy all peers",()=>{
-            
-             (peersRef.current).filter((p) =>{
-              p.destroy();
-              return false;
-            })
-            peersRef.current={};
-            setPeers({})
-          })
-          // socketRef.current.on("already in the room",() => {
-          //   console.log('already in the room')
-          //   navigate('/')
-          // })
-          // socketRef.current.on('forced logOut',()=>{
-          //   localStorage.removeItem('userAccessToken')
-          //   navigate('/')
-          // })
           socketRef.current.on("receiving returned signal", (payload) => {
+            if(!myVideoFlag)return
             const item = peersRef.current.find((p) => p.peerID === payload.id);
             if (!item) return;
             item.peer.signal(payload.signal);
+          });
+          socketRef.current.on("change", (payload) => {
+            setUserUpdate(payload);
           });
         })
         .catch((err) => {
@@ -99,16 +104,9 @@ const Room = () => {
       navigate('/')
     })
     return function cleanup() {
-      // const peerObj = peersRef.current.find((p) => p.peerID === socketRef.current.id);
-      // if (peerObj) {
-      //   peerObj.peer.destroy();
-      // }
-      // socketRef.current.emit("user got back to home" ,socketRef.current.id);
       peersRef.current=[]
       setPeers({})
       socket.close();
-      
-      
     }
   }, []);
 
@@ -141,14 +139,58 @@ const Room = () => {
     peer.signal(incomingSignal);
     return peer;
   }
+  const onCamraToggle=()=>{
+    if (userVideo.current.srcObject) {
+      userVideo.current.srcObject.getTracks().forEach(function (track) {
+        if (track.kind === "video") {
+          if (track.enabled) {
+            socketRef.current.emit("change", [...userUpdate,{
+              id: socketRef.current.id,
+              videoFlag: false,
+              audioFlag,
+            }]);
+            track.enabled = false;
+            setMyVideoFlag(false);
+          } else {
+            socketRef.current.emit("change", [...userUpdate,{
+              id: socketRef.current.id,
+              videoFlag: true,
+              audioFlag,
+            }]);
+            track.enabled = true;
+            setMyVideoFlag(true);
+          }
+        }
+      });
+    }
+  }
+  const onAudioToggle=()=>{
+    setMyAudioFlag(!myAudioFlag)
+  }
   return (
+    <>
     <div className="container">
-      <video muted ref={userVideo} autoPlay playsInline />
-      {console.log(peers)}
+      
+
+      <video muted ref={userVideo}  autoPlay playsInline />
+      
       {peers.map((peer) => {
         return <Video key={peer.peerID} peer={peer.peer} />;
       })}
     </div>
+      <div className="room-footer">
+      <div className="left-footer">
+      <input type="button" style={{textDecoration:myAudioFlag?'line-through':''}} className="screen"  value="audio" onClick={()=>{onAudioToggle()}}/>
+      <input type="button" className="screen"  value="camra" onClick={()=>{onCamraToggle()}}/>
+      </div>
+      <div className="middle-footer">
+      <input type="button" className="screen"  value="Screen Share" onClick={()=>{}}/>
+      </div>
+      <div className="right-footer">
+      <input type="button" className="screen"  value="empty" onClick={()=>{}}/>
+      </div>
+      </div>
+    </>
   );
 };
 

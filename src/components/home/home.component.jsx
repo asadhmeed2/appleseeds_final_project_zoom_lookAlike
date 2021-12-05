@@ -5,8 +5,18 @@ import  CreateRoom  from "../streamView/creatRoom.component";
 import Login from "../login/login.component"
 
 
-const Home=({logedIn,setLogedIn,login})=> {
-    
+const Home=()=> {
+    const [logedIn,setLogedIn]=useState(false)
+  const [user,setUser]=useState({});
+    const login =async(email,password)=>{
+        try{
+            const loginData = await axios.post("http://localhost:4000/login",{email:email,password:password})
+            localStorage.setItem("userAccessToken", JSON.stringify(loginData.data.accessToken))
+          setLogedIn(true)
+        }catch(err){
+            console.log(err);
+        }
+    }
     useEffect(()=>{
         if(localStorage.getItem('userAccessToken')){
             (()=>{
@@ -14,6 +24,7 @@ const Home=({logedIn,setLogedIn,login})=> {
                     headers:{'authorization':`bearer ${JSON.parse(localStorage.getItem('userAccessToken'))}` }
                   }
                 axios.get("http://localhost:4000/auth",options).then((response)=>{
+                    setUser(response.data);
                     setLogedIn(prv=>true)
                 }).catch((error)=>{
                     console.log(error);
@@ -29,9 +40,8 @@ const Home=({logedIn,setLogedIn,login})=> {
             {
                 !logedIn?
            <Login logIn={login}/>: 
-           <>
-           <h1>private video chat app</h1> 
-           <CreateRoom/>
+           <> 
+           <CreateRoom user={user}/>
            </>
 }
         </div>

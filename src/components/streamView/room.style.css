@@ -3,9 +3,15 @@
   grid-template-columns: repeat(auto-fill,300px);
   grid-template-rows: 300px;
   gap: 3px;
+  height: 80vh;
 }
  video {
   height: 100%;
   width: 100%;
   object-fit: cover;
 } 
+.room-footer{
+  display: flex;
+  justify-content: space-around;
+  
+}
