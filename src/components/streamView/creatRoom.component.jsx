@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { v1 as uuid } from "uuid";
+// import { useNavigate } from "react-router-dom";
+// import { v1 as uuid } from "uuid";
 import axios from "axios";
 import "./creatRoom.style.css";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import Room  from "../streamView/room.component"
-const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+// const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
 const CreateRoom = ({user}) => {
   // const navigate = useNavigate();
@@ -31,7 +31,7 @@ const CreateRoom = ({user}) => {
       },
     };
     axios
-      .get("http://localhost:4000/auth", options)
+      .get("https://asad-zoom-look-alike-server.herokuapp.com/auth", options)
       .then((response) => {
         setRoomJoined(true);
       }

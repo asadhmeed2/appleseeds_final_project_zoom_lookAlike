@@ -8,7 +8,7 @@ import {useNavigate} from 'react-router-dom'
 import Video from "../video/video.component";
 import { useParams } from "react-router-dom";
 import "./room.style.css";
-const socket = io("http://localhost:4000", { transports: ["websocket"] });
+const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
 
 const Room = ({user}) => {
   const navigate =useNavigate();
@@ -30,7 +30,7 @@ const Room = ({user}) => {
       const options ={
         headers:{'authorization':`bearer ${JSON.parse(localStorage.getItem('userAccessToken'))}` }
       }
-    axios.get("http://localhost:4000/auth",options).then(response => {
+    axios.get("https://asad-zoom-look-alike-server.herokuapp.com/auth",options).then(response => {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: false })
         .then((stream) => {

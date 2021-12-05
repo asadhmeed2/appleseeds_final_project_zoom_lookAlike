@@ -10,7 +10,7 @@ const Home=()=> {
   const [user,setUser]=useState({});
     const login =async(email,password)=>{
         try{
-            const loginData = await axios.post("http://localhost:4000/login",{email:email,password:password})
+            const loginData = await axios.post("https://asad-zoom-look-alike-server.herokuapp.com/login",{email:email,password:password})
             localStorage.setItem("userAccessToken", JSON.stringify(loginData.data.accessToken))
           setLogedIn(true)
         }catch(err){
@@ -23,7 +23,7 @@ const Home=()=> {
                 const options ={
                     headers:{'authorization':`bearer ${JSON.parse(localStorage.getItem('userAccessToken'))}` }
                   }
-                axios.get("http://localhost:4000/auth",options).then((response)=>{
+                axios.get("https://asad-zoom-look-alike-server.herokuapp.com/auth",options).then((response)=>{
                     setUser(response.data);
                     setLogedIn(prv=>true)
                 }).catch((error)=>{
