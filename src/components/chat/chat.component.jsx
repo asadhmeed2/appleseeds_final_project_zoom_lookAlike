@@ -15,8 +15,8 @@ const Chat=({name})=> {
         setUserName(name);
         socketRef.current =socket;
         socket.open();
-        socket.on("message",({userName,message}) =>{
-            setMessages(prev=>[...messages,{userName,message}])
+        socket.on("all messages",(messages) =>{
+            setMessages(prev=>messages)
         })
     })
 
@@ -34,7 +34,7 @@ const Chat=({name})=> {
         <div>
         <div className="screen">
             {messages !=[] && messages.map((messageObj)=>{
-                return <div className="message=container" key={uuidv4()}>
+                return <div className="message-container" key={uuidv4()}>
                     <div className="username">
                         {messageObj.userName}
                     </div>
