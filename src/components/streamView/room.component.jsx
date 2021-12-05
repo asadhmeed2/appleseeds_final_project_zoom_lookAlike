@@ -165,7 +165,29 @@ const Room = ({user}) => {
     }
   }
   const onAudioToggle=()=>{
-    setMyAudioFlag(!myAudioFlag)
+    if (userVideo.current.srcObject) {
+      userVideo.current.srcObject.getTracks().forEach(function (track) {
+        if (track.kind === "audio") {
+          if (track.enabled) {
+            socketRef.current.emit("change",[...userUpdate, {
+              id: socketRef.current.id,
+              videoFlag,
+              audioFlag: false,
+            }]);
+            track.enabled = false;
+            setMyAudioFlag(false);
+          } else {
+            socketRef.current.emit("change",[...userUpdate, {
+              id: socketRef.current.id,
+              videoFlag,
+              audioFlag: true,
+            }]);
+            track.enabled = true;
+            setMyAudioFlag(true);
+          }
+        }
+      });
+    }
   }
   return (
     <>
