@@ -52,7 +52,7 @@ const CreateRoom = ({user}) => {
       </div>
       <div className="room-containr">
       {
-        roomJoined?<><Room usrname={username} user={user}/></>:
+        roomJoined?<><Room name={username} user={user}/></>:
         <div className="room-userName">
           <input type="text" value={username} onChange={onInputUserName}/>
           <button onClick={join}>Join Room</button>

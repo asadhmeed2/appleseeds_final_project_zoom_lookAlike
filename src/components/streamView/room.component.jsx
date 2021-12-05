@@ -3,28 +3,28 @@ import { io } from "socket.io-client";
 import Peer from "simple-peer";
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
-
+import Chat from '../chat/chat.component';
 // import {nanoid} from 'nanoid'
 import Video from "../video/video.component";
 import { useParams } from "react-router-dom";
 import "./room.style.css";
 const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
 
-const Room = ({user}) => {
+const Room = ({name}) => {
   const navigate =useNavigate();
   const params = useParams();
   const [peers, setPeers] = useState([]);
   const [userUpdate, setUserUpdate] = useState([]);
   const [myVideoFlag, setMyVideoFlag] = useState(true);
-  const [myAudioFlag, setMyAudioFlag] = useState(true);
+  const [myAudioFlag, setMyAudioFlag] = useState(false);
+  const [userName, setUserName] = useState()
   const socketRef = useRef();
   const userVideo = useRef();
-  const videoSream = useRef();
-  // const userIdRef=useRef();
   const peersRef = useRef([]);
   const roomID = params.roomID;
 
   useEffect(() => {
+    setUserName(name)
     socketRef.current = socket;
     socket.open()
       const options ={
@@ -32,25 +32,11 @@ const Room = ({user}) => {
       }
     axios.get("https://asad-zoom-look-alike-server.herokuapp.com/auth",options).then(response => {
       navigator.mediaDevices
-        .getUserMedia({ video: true, audio: false })
+        .getUserMedia({ video: true, audio: true })
         .then((stream) => {
           userVideo.current.srcObject = stream;
-
-          // userVideo.current.onloadedmetadata = (metadata) => {
-          //   userVideo.current.play();
-          // }
-          // let mediaRecorder = new MediaRecorder(stream);
-          // videoSream.current =()=>{
-          //   if(myVideoFlag){
-          //     mediaRecorder.pause();
-          //   }else{
-          //     mediaRecorder.start();
-          //   }
-          // }
-
-
-
           socketRef.current.emit("join room", {roomID,uniqueID:response.data.uniqid});
+          socketRef.current.emit("user joined the chat",{roomID,userName: userName});
           socketRef.current.on("all users", (users) => {
             console.log('users',users);
             const peers = [];
@@ -141,22 +127,23 @@ const Room = ({user}) => {
   }
   const onCamraToggle=()=>{
     if (userVideo.current.srcObject) {
-      userVideo.current.srcObject.getTracks().forEach(function (track) {
+      userVideo.current.srcObject.getTracks().forEach( (track)=> {
+        console.log(track.kind,track.enabled);
         if (track.kind === "video") {
           if (track.enabled) {
-            socketRef.current.emit("change", [...userUpdate,{
-              id: socketRef.current.id,
-              myVideoFlag: false,
-              myAudioFlag,
-            }]);
+            // socketRef.current.emit("change", [...userUpdate,{
+            //   id: socketRef.current.id,
+            //   myVideoFlag: false,
+            //   myAudioFlag,
+            // }]);
             track.enabled = false;
             setMyVideoFlag(false);
           } else {
-            socketRef.current.emit("change", [...userUpdate,{
-              id: socketRef.current.id,
-              myVideoFlag: true,
-              myAudioFlag,
-            }]);
+            // socketRef.current.emit("change", [...userUpdate,{
+            //   id: socketRef.current.id,
+            //   myVideoFlag: true,
+            //   myAudioFlag,
+            // }]);
             track.enabled = true;
             setMyVideoFlag(true);
           }
@@ -165,9 +152,11 @@ const Room = ({user}) => {
     }
   }
   const onAudioToggle=()=>{
+    console.log(userVideo.current.srcObject.getTracks());
     if (userVideo.current.srcObject) {
-      userVideo.current.srcObject.getTracks().forEach(function (track) {
+      userVideo.current.srcObject.getTracks().forEach( (track)=> {
         if (track.kind === "audio") {
+          console.log(track.kind,track.enabled);
           if (track.enabled) {
             socketRef.current.emit("change",[...userUpdate, {
               id: socketRef.current.id,
@@ -190,20 +179,21 @@ const Room = ({user}) => {
     }
   }
   return (
-    <>
-    <div className="container">
-      
+   <div className="room">
 
+    <div>
+    <div className="container">
       <video muted ref={userVideo}  autoPlay playsInline />
-      
       {peers.map((peer) => {
-        return <Video key={peer.peerID} peer={peer.peer} />;
+        return <><Video key={peer.peerID} peer={peer.peer} />
+        
+        </>;
       })}
     </div>
       <div className="room-footer">
       <div className="left-footer">
-      <input type="button" style={{textDecoration:myAudioFlag?'line-through':''}} className="screen"  value="audio" onClick={()=>{onAudioToggle()}}/>
-      <input type="button" className="screen"  value="camra" onClick={()=>{onCamraToggle()}}/>
+      <input type="button" style={{textDecoration:myAudioFlag?'':'line-through'}} className="screen"  value="audio" onClick={()=>{onAudioToggle()}}/>
+      <input type="button" style={{textDecoration:myVideoFlag?'':'line-through'}} className="screen"  value="camra" onClick={()=>{onCamraToggle()}}/>
       </div>
       <div className="middle-footer">
       <input type="button" className="screen"  value="Screen Share" onClick={()=>{}}/>
@@ -212,7 +202,9 @@ const Room = ({user}) => {
       <input type="button" className="screen"  value="empty" onClick={()=>{}}/>
       </div>
       </div>
-    </>
+    </div>
+      <Chat name={userName}/>
+    </div>
   );
 };
 
