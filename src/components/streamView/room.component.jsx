@@ -171,16 +171,16 @@ const Room = ({user}) => {
           if (track.enabled) {
             socketRef.current.emit("change",[...userUpdate, {
               id: socketRef.current.id,
-              videoFlag,
-              audioFlag: false,
+              myVideoFlag,
+              myAudioFlag: false,
             }]);
             track.enabled = false;
             setMyAudioFlag(false);
           } else {
             socketRef.current.emit("change",[...userUpdate, {
               id: socketRef.current.id,
-              videoFlag,
-              audioFlag: true,
+              myVideoFlag,
+              myAudioFlag: true,
             }]);
             track.enabled = true;
             setMyAudioFlag(true);
