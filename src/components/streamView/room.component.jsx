@@ -20,8 +20,11 @@ const Room = ({name}) => {
   const [userName, setUserName] = useState()
   const socketRef = useRef();
   const userVideo = useRef();
+  const peerRef = useRef();
   const peersRef = useRef([]);
   const roomID = params.roomID;
+  const userStream = useRef();
+  const senders = useRef([]);
 
   useEffect(() => {
     setUserName(name)
@@ -35,6 +38,7 @@ const Room = ({name}) => {
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
           userVideo.current.srcObject = stream;
+          userStream.current = stream;
           socketRef.current.emit("join room", {roomID,uniqueID:response.data.uniqid});
           socketRef.current.emit("user joined the chat",{roomID,userName: userName});
           socketRef.current.on("all users", (users) => {
@@ -47,10 +51,15 @@ const Room = ({name}) => {
                 peer,
               });
               peers.push({
-                  peerID:userID ,
-                  peer: peer,
+                peerID:userID ,
+                peer: peer,
               });
             });
+            userStream.current.getTracks().forEach(track => senders.current.push(peers.map((peer) =>{
+              // peer.addTrack(track, userStream.current);
+              console.log("peer" ,peer);
+            }
+            )))
             setPeers(prev=>peers);
           });
   
@@ -179,6 +188,19 @@ const Room = ({name}) => {
       });
     }
   }
+ const shareScreen=()=> {
+    navigator.mediaDevices.getDisplayMedia({ cursor: true }).then(stream => {
+        const screenTrack = stream.getTracks()[0];
+        console.log("screenTrack",screenTrack);
+        userVideo.current.srcObject=stream;
+        screenTrack.onended = function() {
+          navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          userVideo.current.srcObject = stream;})
+        }
+    })
+}
   return (
    <div className="room">
 
@@ -197,7 +219,7 @@ const Room = ({name}) => {
       <input type="button" style={{textDecoration:myVideoFlag?'':'line-through'}} className="screen"  value="camra" onClick={()=>{onCamraToggle()}}/>
       </div>
       <div className="middle-footer">
-      <input type="button" className="screen"  value="Screen Share" onClick={()=>{}}/>
+      <input type="button" className="screen"  value="Screen Share" onClick={()=>{shareScreen()}}/>
       </div>
       <div className="right-footer">
       <input type="button" className="screen"  value="empty" onClick={()=>{}}/>
