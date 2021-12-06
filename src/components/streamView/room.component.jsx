@@ -41,7 +41,7 @@ const Room = ({name}) => {
         .then((stream) => {
           userVideo.current.srcObject = stream;
           userStream.current=stream;
-          socketRef.current.emit("join room", {roomID,uniqueID:response.data.uniqid});
+          socketRef.current.emit("join room", {roomID:"roomID",uniqueID:response.data.uniqid});
           socketRef.current.on("all users", (users) => {
             console.log('users',users);
             const peers = [];
@@ -236,9 +236,7 @@ const Room = ({name}) => {
     <div className="container">
       <video muted ref={userVideo}  autoPlay playsInline />
       {peers.map((peer) => {
-        return <><Video key={peer.peerID} peer={peer.peer} />
-        
-        </>;
+        return <Video key={peer.peerID} peer={peer.peer} />
       })}
     </div>
       <div className="room-footer">
