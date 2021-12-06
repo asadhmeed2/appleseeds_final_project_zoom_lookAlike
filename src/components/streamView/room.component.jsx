@@ -8,7 +8,8 @@ import Chat from '../chat/chat.component';
 import Video from "../video/video.component";
 import { useParams } from "react-router-dom";
 import "./room.style.css";
-const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
+// const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
+const socket = io("http://localhost:4000", { transports: ["websocket"] });
 
 const Room = ({name}) => {
   const navigate =useNavigate();
@@ -20,11 +21,12 @@ const Room = ({name}) => {
   const [userName, setUserName] = useState()
   const socketRef = useRef();
   const userVideo = useRef();
-  const peerRef = useRef();
+  const webcamVideoTrak= useRef()
+  const userStream = useRef()
   const peersRef = useRef([]);
   const roomID = params.roomID;
-  const userStream = useRef();
-  const senders = useRef([]);
+  // const userStream = useRef();
+
 
   useEffect(() => {
     setUserName(name)
@@ -38,9 +40,8 @@ const Room = ({name}) => {
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
           userVideo.current.srcObject = stream;
-          userStream.current = stream;
+          userStream.current=stream;
           socketRef.current.emit("join room", {roomID,uniqueID:response.data.uniqid});
-          socketRef.current.emit("user joined the chat",{roomID,userName: userName});
           socketRef.current.on("all users", (users) => {
             console.log('users',users);
             const peers = [];
@@ -55,11 +56,11 @@ const Room = ({name}) => {
                 peer: peer,
               });
             });
-            userStream.current.getTracks().forEach(track => senders.current.push(peers.map((peer) =>{
-              // peer.addTrack(track, userStream.current);
-              console.log("peer" ,peer);
-            }
-            )))
+            // userStream.current.getTracks().forEach(track => senders.current.push(peers.map((peer) =>{
+            //   // peer.addTrack(track, userStream.current);
+            //   console.log("peer" ,peer);
+            // }
+            // )))
             setPeers(prev=>peers);
           });
   
@@ -89,9 +90,9 @@ const Room = ({name}) => {
             if (!item) return;
             item.peer.signal(payload.signal);
           });
-          socketRef.current.on("change", (payload) => {
-            setUserUpdate(payload);
-          });
+          // socketRef.current.on("change", (payload) => {
+          //   setUserUpdate(payload);
+          // });
         })
         .catch((err) => {
           console.log(err);
@@ -100,9 +101,10 @@ const Room = ({name}) => {
       navigate('/')
     })
     return function cleanup() {
-      // peersRef.current=[]
-      // setPeers({})
-      // socket.close();
+      
+      peersRef.current=[]
+      setPeers({})
+      socket.close();
     }
   }, []);
 
@@ -192,13 +194,39 @@ const Room = ({name}) => {
     navigator.mediaDevices.getDisplayMedia({ cursor: true }).then(stream => {
         const screenTrack = stream.getTracks()[0];
         console.log("screenTrack",screenTrack);
-        userVideo.current.srcObject=stream;
+        console.log("userVideo.current.srcObject",userVideo.current.srcObject);
+        userVideo.current.srcObject.getTracks().forEach(track=>{
+          if(track.kind==="video"){
+            console.log(track);
+            webcamVideoTrak.current=track;
+            track.enabled = false;
+            screenTrack.enabled = true;
+            let tempPeers=[...peers]
+             tempPeers.map((peer)=>{
+              peer.peer.replaceTrack(track,screenTrack,userStream.current);
+            })
+
+              setPeers(tempPeers)
+          }
+        });
         screenTrack.onended = function() {
-          navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then((stream) => {
-          userVideo.current.srcObject = stream;})
+          userVideo.current.srcObject.getTracks().forEach(track=>{
+            if(track.kind==="video"){
+              webcamVideoTrak.current.enabled = true;
+            track.enabled = false;
+            let tempPeers=[...peers]
+             tempPeers.map((peer)=>{
+              peer.peer.replaceTrack(track,webcamVideoTrak,userStream.current);
+              })
+              setPeers(tempPeers)
+            }
+          });
         }
+      
+      
+          
+    
+      
     })
 }
   return (
