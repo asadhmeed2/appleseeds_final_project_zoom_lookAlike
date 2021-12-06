@@ -8,8 +8,8 @@ import Chat from '../chat/chat.component';
 import Video from "../video/video.component";
 import { useParams } from "react-router-dom";
 import "./room.style.css";
-// const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
-const socket = io("http://localhost:4000", { transports: ["websocket"] });
+const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
+// const socket = io("http://localhost:4000", { transports: ["websocket"] });
 
 const Room = ({name}) => {
   const navigate =useNavigate();
