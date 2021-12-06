@@ -8,24 +8,13 @@ import Home from './components/home/home.component';
 
 
 function App() {
-  const [logedIn,setLogedIn]=useState(false)
-  const [user,setUser]=useState({});
-    const login =async(email,password)=>{
-        try{
-            const loginData = await axios.post("http://localhost:4000/login",{email:email,password:password})
-            setUser(loginData)
-            localStorage.setItem("userAccessToken", JSON.stringify(loginData.data.accessToken))
-          setLogedIn(true)
-        }catch(err){
-            console.log(err);
-        }
-    }
+  
   return (
     <Router>
     <div className="App">
       <Routes>
-      <Route path="/" element={<Home login={login} setLogedIn={setLogedIn} logedIn={logedIn}/>}/>
-      <Route path="/room/:roomId" element={<Room user={user}/>}/>
+      <Route path="/" element={<Home/>}/>
+      {/* <Route path="/room/:roomId" element={<Room user={user}/>}/> */}
         </Routes>
     </div>
     </Router>

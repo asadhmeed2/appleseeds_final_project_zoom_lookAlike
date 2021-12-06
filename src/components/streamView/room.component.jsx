@@ -63,7 +63,8 @@ const Room = ({name}) => {
             setPeers((users) => [...users, {peerID:payload.callerID,peer}]);
           });
           socketRef.current.on("user left", (id) => {
-            console.log(id);
+            
+            console.log(id, "user left");
             const peerObj = peersRef.current.find((p) => p.peerID === id);
             if (peerObj) {
               peerObj.peer.destroy();
@@ -90,9 +91,9 @@ const Room = ({name}) => {
       navigate('/')
     })
     return function cleanup() {
-      peersRef.current=[]
-      setPeers({})
-      socket.close();
+      // peersRef.current=[]
+      // setPeers({})
+      // socket.close();
     }
   }, []);
 
@@ -158,19 +159,19 @@ const Room = ({name}) => {
         if (track.kind === "audio") {
           console.log(track.kind,track.enabled);
           if (track.enabled) {
-            socketRef.current.emit("change",[...userUpdate, {
-              id: socketRef.current.id,
-              myVideoFlag,
-              myAudioFlag: false,
-            }]);
+            // socketRef.current.emit("change",[...userUpdate, {
+            //   id: socketRef.current.id,
+            //   myVideoFlag,
+            //   myAudioFlag: false,
+            // }]);
             track.enabled = false;
             setMyAudioFlag(false);
           } else {
-            socketRef.current.emit("change",[...userUpdate, {
-              id: socketRef.current.id,
-              myVideoFlag,
-              myAudioFlag: true,
-            }]);
+            // socketRef.current.emit("change",[...userUpdate, {
+            //   id: socketRef.current.id,
+            //   myVideoFlag,
+            //   myAudioFlag: true,
+            // }]);
             track.enabled = true;
             setMyAudioFlag(true);
           }
