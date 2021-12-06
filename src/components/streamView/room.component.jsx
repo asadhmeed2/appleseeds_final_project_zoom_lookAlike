@@ -8,14 +8,14 @@ import Chat from '../chat/chat.component';
 import Video from "../video/video.component";
 import { useParams } from "react-router-dom";
 import "./room.style.css";
-const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
-// const socket = io("http://localhost:4000", { transports: ["websocket"] });
+// const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
+const socket = io("http://localhost:4000", { transports: ["websocket"] });
 
 const Room = ({name}) => {
   const navigate =useNavigate();
   const params = useParams();
   const [peers, setPeers] = useState([]);
-  const [userUpdate, setUserUpdate] = useState([]);
+  // const [userUpdate, setUserUpdate] = useState([]);
   const [myVideoFlag, setMyVideoFlag] = useState(true);
   const [myAudioFlag, setMyAudioFlag] = useState(false);
   const [userName, setUserName] = useState()
@@ -24,7 +24,7 @@ const Room = ({name}) => {
   const webcamVideoTrak= useRef()
   const userStream = useRef()
   const peersRef = useRef([]);
-  const roomID = params.roomID;
+  // const roomID = params.roomID;
   // const userStream = useRef();
 
 
@@ -212,11 +212,11 @@ const Room = ({name}) => {
         screenTrack.onended = function() {
           userVideo.current.srcObject.getTracks().forEach(track=>{
             if(track.kind==="video"){
-              webcamVideoTrak.current.enabled = true;
-            track.enabled = false;
+              webcamVideoTrak.current.enabled = false;
+            track.enabled = true;
             let tempPeers=[...peers]
              tempPeers.map((peer)=>{
-              peer.peer.replaceTrack(track,webcamVideoTrak,userStream.current);
+              peer.peer.replaceTrack(webcamVideoTrak.current,track,userStream.current);
               })
               setPeers(tempPeers)
             }
