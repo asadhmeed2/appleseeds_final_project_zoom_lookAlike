@@ -5,7 +5,7 @@ import {
   Paper,
   Button,
 } from "@material-ui/core";
-const LoginPage = ({logIn}) => {
+const LoginPage = ({loding,logIn}) => {
     const [email,setEmail]=React.useState("")
     const [password,setPassword]=React.useState("")
     const errorRef =React.useRef()
@@ -38,7 +38,7 @@ const LoginPage = ({logIn}) => {
               <div className="error" ref={errorRef}></div>
           </Grid>
           <Grid item xs={12}>
-            <Button fullWidth onClick={handleLogin}> Login </Button>
+            <Button disabled={loding} fullWidth onClick={handleLogin}> Login </Button>
           </Grid>
         </Grid>
       </Paper>
