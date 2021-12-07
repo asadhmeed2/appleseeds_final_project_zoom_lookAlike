@@ -234,11 +234,11 @@ const scallVideo = () => {
           authorization: `bearer ${JSON.parse(accessToken)}`,
         },
       };
-      axios.get("http://localhost:4000/logout",options).then(response=>{
+      axios.get("https://asad-zoom-look-alike-server.herokuapp.com/logout",options).then(response=>{
       localStorage.removeItem("userAccessToken")
       console.log(response.data);
       setLoding(false);
-      socket.close();
+      window.location.reload(false);
       }).catch((error)=>{
         console.log(error);
         setLoding(false);
