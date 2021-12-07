@@ -6,7 +6,7 @@
   flex-wrap: wrap;
   gap: 3px;
   height: 100vh;
-  width:100%;
+  width:84vw;
   gap: 15px;
   overflow:scroll;
   padding:15px;
@@ -64,4 +64,12 @@
 }
 .empty{
   visibility: hidden;
+}
+.log-out{
+  padding: 10px;
+  font-size:18px;
+  background:rgb(182, 44, 44);
+  color: #fff;
+  border-radius: 5px;
+  margin-right: 20px;
 }

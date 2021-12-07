@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import {v4 as uuidv4} from "uuid";
-
-// const socket = io("http://localhost:4001", { transports: ["websocket"] });
-const socket = io("https://asad-zoom-look-alike-chat-serv.herokuapp.com/", { transports: ["websocket"] });
+import "./chat.style.css"
+const socket = io("http://localhost:4001", { transports: ["websocket"] });
+// const socket = io("https://asad-zoom-look-alike-chat-serv.herokuapp.com/", { transports: ["websocket"] });
 
 
 const Chat=({name})=> {
@@ -11,6 +11,7 @@ const Chat=({name})=> {
     const [messageText,setMessageText]=useState("")
     const [userName,setUserName]=useState("")
     const textRef=useRef()
+    const scrollToRef=useRef();
     const socketRef = useRef();
     useEffect(() => {
         setUserName(name);
@@ -21,6 +22,7 @@ const Chat=({name})=> {
         socket.on("all messages",(tempMessages) =>{
             console.log("tempMessages" ,tempMessages);
             setMessages(prev=>tempMessages)
+            scrollToRef.current.scrollIntoView({ behavior : 'smooth'});
         })
         return (
             ()=>{
@@ -36,23 +38,24 @@ const Chat=({name})=> {
         if(messageText){
             socketRef.current.emit("message",{userName:userName,message:messageText});
             textRef.current.value=""
+            setMessageText("") 
         }
     }
     return (
-        <div>
-        <div className="screen">
+        <div className="chat">
+        <div className="chat-screen">
             {messages !=[] && messages.map((messageObj)=>{
                 console.log(messageObj.userName,messageObj.message);
                 return <div className="message-container" key={uuidv4()}>
-                    
-                    <div className="username">
+                    <span className="username">
                         {messageObj.userName}
-                    </div>
-                     <div className="message">
+                    </span> : 
+                     <span className="message">
                          {messageObj.message}
-                     </div>
+                     </span>
                 </div>
             })}
+            <div ref={scrollToRef} ></div>
             </div>
             <input type="text" ref={textRef} onChange={hndleMessage} />
             <input type="button" onClick={sendMessage} value={"send"} className="submitMessage" />

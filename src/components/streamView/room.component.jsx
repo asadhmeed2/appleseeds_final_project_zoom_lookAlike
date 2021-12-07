@@ -16,6 +16,7 @@ const Room = ({name}) => {
   const [peers, setPeers] = useState([]);
   const [myVideoFlag, setMyVideoFlag] = useState(true);
   const [myAudioFlag, setMyAudioFlag] = useState(true);
+  const [loding, setLoding] = useState(false);
   const [userName, setUserName] = useState()
   const socketRef = useRef();
   const userVideo = useRef();
@@ -222,6 +223,28 @@ const Room = ({name}) => {
 const scallVideo = () => {
   userVideo.current.classList.toggle("scalled");
   }
+
+  const handleLogout =()=>{
+    setLoding(true);
+    if(localStorage.getItem("userAccessToken")){
+      let accessToken = localStorage.getItem("userAccessToken");
+      console.log("accessToken",accessToken);
+      const options = {
+        headers: {
+          authorization: `bearer ${JSON.parse(accessToken)}`,
+        },
+      };
+      axios.get("http://localhost:4000/logout",options).then(response=>{
+      localStorage.removeItem("userAccessToken")
+      console.log(response.data);
+      setLoding(false);
+      socket.close();
+      }).catch((error)=>{
+        console.log(error);
+        setLoding(false);
+      })
+    }
+  }
   return (
    <div className="room">
     <div className="body">
@@ -243,7 +266,7 @@ const scallVideo = () => {
       <input type="button" className="screen"  value="Screen Share" onClick={()=>{shareScreen()}}/>
       </div>
       <div className="right-footer">
-      <input type="button" className="empty"  value="empty" onClick={()=>{}}/>
+      <button className="log-out" disabled={loding} onClick={handleLogout}>Log out</button>
       </div>
       </div>
     </div>

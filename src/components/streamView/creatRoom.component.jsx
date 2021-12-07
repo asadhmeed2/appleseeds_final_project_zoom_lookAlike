@@ -41,7 +41,7 @@ const CreateRoom = ({user}) => {
     <>
       <div className="nav">
       <div className="logo">asad privet chat</div>
-      <button onClick={() => {}}>Log out</button>
+      
       </div>
       <div className="room-containr">
       {
