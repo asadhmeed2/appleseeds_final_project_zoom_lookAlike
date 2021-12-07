@@ -35,8 +35,8 @@ const Chat=({name})=> {
     const sendMessage =()=>{
         if(messageText){
             console.log(messageText);
-            socketRef.current.emit("message",{userName,message:messageText});
-            textRef.current=""
+            socketRef.current.emit("message",{userName:userName,message:messageText});
+            textRef.current.value=""
         }
     }
     return (
