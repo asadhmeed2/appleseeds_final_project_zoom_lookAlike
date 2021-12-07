@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import {v4 as uuidv4} from "uuid";
 
-const socket = io("http://localhost:4001", { transports: ["websocket"] });
-// const socket = io("https://asad-zoom-look-alike-chat-serv.herokuapp.com/", { transports: ["websocket"] });
+// const socket = io("http://localhost:4001", { transports: ["websocket"] });
+const socket = io("https://asad-zoom-look-alike-chat-serv.herokuapp.com/", { transports: ["websocket"] });
 
 
 const Chat=({name})=> {
