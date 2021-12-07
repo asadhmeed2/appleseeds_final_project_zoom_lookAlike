@@ -26,8 +26,11 @@ const Home = () => {
       setLoding(false);
     } catch (err) {
       console.log(err);
+      setLoding(false);
     }
+    setLoding(false);
   };
+  
   useEffect(() => {
       setLoding(true);
     if (localStorage.getItem("userAccessToken")) {
