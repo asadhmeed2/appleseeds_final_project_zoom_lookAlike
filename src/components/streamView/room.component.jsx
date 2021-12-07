@@ -189,7 +189,7 @@ const Room = ({name}) => {
           if(track.kind==="video"){
             console.log(track);
             webcamVideoTrak.current=track;
-            track.enabled = false;
+            track.enabled = true;
             screenTrack.enabled = true;
             let tempPeers=[...peers]
              tempPeers.map((peer)=>{
