@@ -13,20 +13,15 @@ const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transp
 
 const Room = ({name}) => {
   const navigate =useNavigate();
-  const params = useParams();
   const [peers, setPeers] = useState([]);
-  // const [userUpdate, setUserUpdate] = useState([]);
   const [myVideoFlag, setMyVideoFlag] = useState(true);
-  const [myAudioFlag, setMyAudioFlag] = useState(false);
+  const [myAudioFlag, setMyAudioFlag] = useState(true);
   const [userName, setUserName] = useState()
   const socketRef = useRef();
   const userVideo = useRef();
   const webcamVideoTrak= useRef()
   const userStream = useRef()
   const peersRef = useRef([]);
-  // const roomID = params.roomID;
-  // const userStream = useRef();
-
 
   useEffect(() => {
     setUserName(name)
@@ -56,11 +51,6 @@ const Room = ({name}) => {
                 peer: peer,
               });
             });
-            // userStream.current.getTracks().forEach(track => senders.current.push(peers.map((peer) =>{
-            //   // peer.addTrack(track, userStream.current);
-            //   console.log("peer" ,peer);
-            // }
-            // )))
             setPeers(prev=>peers);
           });
   
@@ -203,7 +193,7 @@ const Room = ({name}) => {
             screenTrack.enabled = true;
             let tempPeers=[...peers]
              tempPeers.map((peer)=>{
-              peer.peer.replaceTrack(track,screenTrack,userStream.current);
+                 peer.peer.replaceTrack(track,screenTrack,userStream.current);
             })
 
               setPeers(tempPeers)
@@ -229,12 +219,17 @@ const Room = ({name}) => {
       
     })
 }
+const scallVideo = () => {
+  userVideo.current.classList.toggle("scalled");
+  }
   return (
    <div className="room">
-
-    <div>
+    <div className="body">
     <div className="container">
+    <div  className="video-container">
+      <button onClick={scallVideo} className="scall" >[]</button>
       <video muted ref={userVideo}  autoPlay playsInline />
+      </div>
       {peers.map((peer) => {
         return <Video key={peer.peerID} peer={peer.peer} />
       })}
@@ -248,7 +243,7 @@ const Room = ({name}) => {
       <input type="button" className="screen"  value="Screen Share" onClick={()=>{shareScreen()}}/>
       </div>
       <div className="right-footer">
-      <input type="button" className="screen"  value="empty" onClick={()=>{}}/>
+      <input type="button" className="empty"  value="empty" onClick={()=>{}}/>
       </div>
       </div>
     </div>

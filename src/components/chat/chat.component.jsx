@@ -16,7 +16,7 @@ const Chat=({name})=> {
         setUserName(name);
         socketRef.current =socket;
         socket.open();
-        socket.emit("user joined",{name,id:socket.id,roomID:"room"})
+        socket.emit("user joined",{userName:name,id:socket.id,roomID:"room"})
         socket.emit("get all messages")
         socket.on("all messages",(tempMessages) =>{
             console.log("tempMessages" ,tempMessages);
@@ -43,7 +43,9 @@ const Chat=({name})=> {
         <div>
         <div className="screen">
             {messages !=[] && messages.map((messageObj)=>{
+                console.log(messageObj.userName,messageObj.message);
                 return <div className="message-container" key={uuidv4()}>
+                    
                     <div className="username">
                         {messageObj.userName}
                     </div>

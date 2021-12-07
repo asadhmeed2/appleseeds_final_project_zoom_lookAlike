@@ -1,28 +1,21 @@
-import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { v1 as uuid } from "uuid";
+import React, { useState , useRef} from "react";
 import axios from "axios";
 import "./creatRoom.style.css";
-// import { io } from "socket.io-client";
+
 import Room  from "../streamView/room.component"
-// const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+
 
 const CreateRoom = ({user}) => {
-  // const navigate = useNavigate();
-  // const [rooms, setRooms] = useState([]);
-   const [username, setUsername] = useState([]);
-  
+
+   const [username, setUsername] = useState("");
+  const messageRef=useRef();
   const [roomJoined,setRoomJoined]= useState(false)
-  useEffect(() => {
-    // (() => {
-    //   socket.emit("home page refreshed");
-    //   console.log("home page refreshed");
-    //   socket.on("all rooms links", (roomsData) => {
-    //     setRooms(Object.values(roomsData));
-    //   });
-    // })();
-  }, []);
+ 
   const join = () => {
+    if(username ===""){
+     messageRef.current.innerHTML = "<span style={{color: 'red'}}>user name must not be empty</span>";
+     return
+    }
     const options = {
       headers: {
         authorization: `bearer ${JSON.parse(
@@ -54,8 +47,9 @@ const CreateRoom = ({user}) => {
       {
         roomJoined?<><Room name={username} user={user}/></>:
         <div className="room-userName">
-          <input type="text" value={username} onChange={onInputUserName}/>
+          <input type="text" onFocus={() => {messageRef.current.innerHTML =""}} value={username} onChange={onInputUserName}/>
           <button onClick={join}>Join Room</button>
+          <div ref={messageRef} className="message"></div>
         </div>
       }
       </div>
