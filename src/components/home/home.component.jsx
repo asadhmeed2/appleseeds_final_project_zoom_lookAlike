@@ -55,6 +55,8 @@ const Home = () => {
             setLoding(false)
           });
       })();
+    }else{
+        setLoding(false);
     }
   }, []);
   return (

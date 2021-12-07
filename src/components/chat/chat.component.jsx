@@ -15,6 +15,7 @@ const Chat=({name})=> {
         setUserName(name);
         socketRef.current =socket;
         socket.open();
+        socket.emit("user joined",{name,id:socket.id})
         socket.emit("get all messages")
         socket.on("all messages",(tempMessages) =>{
             console.log("tempMessages" ,tempMessages);
