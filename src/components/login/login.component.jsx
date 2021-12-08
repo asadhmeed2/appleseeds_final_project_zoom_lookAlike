@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from 'react-router-dom';
 import {
   Grid,
   TextField,
@@ -39,6 +40,9 @@ const LoginPage = ({loding,logIn}) => {
           </Grid>
           <Grid item xs={12}>
             <Button disabled={loding} fullWidth onClick={handleLogin}> Login </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <p> dont have an account <Link to={"/register"} className="register-link">Register</Link> </p>
           </Grid>
         </Grid>
       </Paper>

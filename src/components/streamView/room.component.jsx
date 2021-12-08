@@ -237,17 +237,19 @@ const scallVideo = () => {
     setLoding(true);
     if(localStorage.getItem("userAccessToken")){
       let accessToken = localStorage.getItem("userAccessToken");
+      console.log(accessToken);
       const options = {
         headers: {
           authorization: `bearer ${JSON.parse(accessToken)}`,
         },
       };
+      console.log(options);
       // axios.get("https://asad-zoom-look-alike-server.herokuapp.com/logout",options).then(response=>{
       axios.get("http://localhost:4000/logout",options).then(response=>{
       localStorage.removeItem("userAccessToken")
-      if(response.data.adminLogedOut){
-        socketRef.current.emit("logout all");
-      }
+      // if(response.data.adminLogedOut){
+      //   socketRef.current.emit("logout all");
+      // }
       setLoding(false);
       setLogedIn(false);
       // window.location.reload(false);
