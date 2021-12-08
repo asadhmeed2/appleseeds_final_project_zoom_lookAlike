@@ -5,7 +5,15 @@ import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
 import Chat from '../chat/chat.component';
 import Video from "../video/video.component";
-
+import MicIcon from '@mui/icons-material/Mic';
+import MicOffIcon from '@mui/icons-material/MicOff';
+import VideocamIcon from '@mui/icons-material/Videocam';
+import VideocamOffIcon from '@mui/icons-material/VideocamOff';
+import ScreenShareIcon from '@mui/icons-material/ScreenShare';
+import StopScreenShareIcon from '@mui/icons-material/StopScreenShare';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import LogoutIcon from '@mui/icons-material/Logout';
 import "./room.style.css";
 const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
 // const socket = io("http://localhost:4000", { transports: ["websocket"] });
@@ -13,6 +21,8 @@ const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transp
 const Room = ({name ,setLogedIn}) => {
   const navigate =useNavigate();
   const [peers, setPeers] = useState([]);
+  const [shareScreenFlag, setShareScreenFlag] = useState(false);
+  const [fullScreenFlag, setFullScreenFlag] = useState(false);
   const [myVideoFlag, setMyVideoFlag] = useState(true);
   const [myAudioFlag, setMyAudioFlag] = useState(true);
   const [loding, setLoding] = useState(false);
@@ -193,7 +203,7 @@ const Room = ({name ,setLogedIn}) => {
              tempPeers.map((peer)=>{
                  peer.peer.replaceTrack(track,screenTrack,userStream.current);
             })
-
+            setShareScreenFlag(true);
               setPeers(tempPeers)
           }
         });
@@ -207,6 +217,7 @@ const Room = ({name ,setLogedIn}) => {
               peer.peer.replaceTrack(webcamVideoTrak.current,track,userStream.current);
               })
               setPeers(tempPeers)
+              setShareScreenFlag(false);
             }
           });
         }
@@ -219,6 +230,7 @@ const Room = ({name ,setLogedIn}) => {
 }
 const scallVideo = () => {
   userVideo.current.classList.toggle("scalled");
+  setFullScreenFlag(!fullScreenFlag)
   }
 
   function handleLogout(){
@@ -253,7 +265,7 @@ const scallVideo = () => {
     <div className="body">
     <div className="container">
     <div  className="video-container">
-      <button onClick={scallVideo} className="scall" >[]</button>
+      <button onClick={scallVideo} className="scall" >{fullScreenFlag? <FullscreenExitIcon/>:<FullscreenIcon /> }</button>
       <video muted ref={userVideo}  autoPlay playsInline />
       </div>
       {peers.map((peer) => {
@@ -262,14 +274,14 @@ const scallVideo = () => {
     </div>
       <div className="room-footer">
       <div className="left-footer">
-      <input type="button" style={{textDecoration:myAudioFlag?'':'line-through'}} className="screen"  value="audio" onClick={()=>{onAudioToggle()}}/>
-      <input type="button" style={{textDecoration:myVideoFlag?'':'line-through'}} className="screen"  value="camra" onClick={()=>{onCamraToggle()}}/>
+      <button  className=""   onClick={()=>{onAudioToggle()}}>{myAudioFlag?<MicIcon/>:<MicOffIcon/>}</button>
+      <button className=""   onClick={()=>{onCamraToggle()}}>{myVideoFlag?<VideocamIcon/>:<VideocamOffIcon/>}</button>
       </div>
       <div className="middle-footer">
-      <input type="button" className="screen"  value="Screen Share" onClick={()=>{shareScreen()}}/>
+      <button  className=""  onClick={()=>{shareScreen()}}> {shareScreenFlag?<ScreenShareIcon/>:<StopScreenShareIcon/>}</button>
       </div>
       <div className="right-footer">
-      <button className="log-out" disabled={loding} onClick={handleLogout}>Log out</button>
+      <button className="log-out" disabled={loding} onClick={handleLogout}><LogoutIcon/></button>
       </div>
       </div>
     </div>

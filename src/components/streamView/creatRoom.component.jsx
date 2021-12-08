@@ -41,8 +41,6 @@ const CreateRoom = ({user ,setLogedIn}) => {
   return (
     <>
       <div className="nav">
-      <div className="logo">asad privet chat</div>
-      
       </div>
       <div className="room-containr">
       {

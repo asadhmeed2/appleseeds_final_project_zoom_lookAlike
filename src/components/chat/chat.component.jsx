@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import {v4 as uuidv4} from "uuid";
 import "./chat.style.css"
+import SendIcon from '@mui/icons-material/Send';
 // const socket = io("http://localhost:4001", { transports: ["websocket"] });
 const socket = io("https://asad-zoom-look-alike-chat-serv.herokuapp.com/", { transports: ["websocket"] });
 
@@ -31,15 +32,25 @@ const Chat=({name})=> {
             scrollToRef.current?.scrollIntoView({ behavior : 'smooth'});
     },[messages])
 
-    const hndleMessage=(e)=>{
-    setMessageText(e.target.value);
-    }
     const sendMessage =()=>{
         if(messageText){
             socketRef.current.emit("message",{userName:name,message:messageText});
             textRef.current.value=""
             setMessageText("") 
         }
+    }
+    const sendMessageOnEnter =(e)=>{
+        if(e.keyCode=== 13){
+            if(messageText){
+                socketRef.current.emit("message",{userName:name,message:messageText});
+                textRef.current.value=""
+                setMessageText("") 
+            }
+        }
+    }
+    const hndleMessage=(e)=>{
+        
+    setMessageText(e.target.value);
     }
     return (
         <div className="chat">
@@ -56,8 +67,12 @@ const Chat=({name})=> {
                 </div>
             })}
             </div>
-            <input type="text" ref={textRef} onChange={hndleMessage} />
-            <input type="button" onClick={sendMessage} value={"send"} className="submitMessage" />
+            
+            <div className="chat-input">
+            <input type="text" onKeyUp={sendMessageOnEnter} ref={textRef} className="messageInput" onChange={hndleMessage} />
+            <button  onClick={sendMessage}  className="submitMessage" ><SendIcon/></button>
+            </div>
+           
         </div>
     )
 }

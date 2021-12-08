@@ -1,15 +1,15 @@
 .chat-screen{
-    height: 90vh;
+    height: 94vh;
     overflow: scroll;
     overflow-x: hidden;
     width: 14vw;
-    background: whitesmoke;
-    margin-bottom: 15px;
+    background: rgb(168, 163, 163);
+    margin-bottom: 13px;
     line-height: 1.5rem;
 }
 .message-container{
     display: flex;
-    gap: 5px;
+    gap: 10px;
     padding: 10px;
     border-bottom: 1px solid rgb(109, 107, 107);
 }
@@ -18,4 +18,25 @@
 }
 .chat{
     border-top: 1px solid rgb(0, 0, 0)
+}
+.submitMessage{
+border-radius: 50%;
+display: flex;
+background:transparent;
+justify-content: center;
+align-items: center;
+border: none;
+cursor: pointer;
+}
+.chat-input{
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+.messageInput{
+    border-radius: 5px;
+    width: 10vw;
+    padding: 5px;
+    font-size:18px;
+    
 }
