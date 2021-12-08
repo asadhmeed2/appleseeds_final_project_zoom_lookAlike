@@ -24,8 +24,8 @@ const CreateRoom = ({user ,setLogedIn}) => {
       },
     };
     axios
-    .get("https://asad-zoom-look-alike-server.herokuapp.com/auth", options)
-    // .get("http://localhost:4000/auth", options)
+    // .get("https://asad-zoom-look-alike-server.herokuapp.com/auth", options)
+    .get("http://localhost:4000/auth", options)
     .then((response) => {
         setRoomJoined(true);
       }
@@ -35,7 +35,6 @@ const CreateRoom = ({user ,setLogedIn}) => {
   };
  const onInputUserName=(e)=>{
    setUsername(e.target.value)
-   console.log(username);
  }
 
 

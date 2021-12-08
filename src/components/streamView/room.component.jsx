@@ -7,8 +7,8 @@ import Chat from '../chat/chat.component';
 import Video from "../video/video.component";
 
 import "./room.style.css";
-// const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
-const socket = io("http://localhost:4000", { transports: ["websocket"] });
+const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
+// const socket = io("http://localhost:4000", { transports: ["websocket"] });
 
 const Room = ({name ,setLogedIn}) => {
   const navigate =useNavigate();
@@ -24,7 +24,6 @@ const Room = ({name ,setLogedIn}) => {
   const peersRef = useRef([]);
 
   useEffect(() => {
-    console.log(name);
     setUserName(name)
     socketRef.current = socket;
     socket.open()
@@ -40,7 +39,6 @@ const Room = ({name ,setLogedIn}) => {
           userStream.current=stream;
           socketRef.current.emit("join room", {roomID:"roomID",uniqueID:response.data.uniqid});
           socketRef.current.on("all users", (users) => {
-            console.log('users',users);
             const peers = [];
             users.forEach((userID ) => {
               const peer = createPeer(userID , socketRef.current.id, stream);
@@ -71,7 +69,6 @@ const Room = ({name ,setLogedIn}) => {
             if (peerObj) {
               peerObj.peer.destroy();
             }
-            console.log("peersRef.current",peersRef.current);
             const peers = peersRef.current.filter((p) => p.peerID !== id);
             peersRef.current=[...peers];
             setPeers(prvPeers=>peers)
@@ -137,7 +134,6 @@ const Room = ({name ,setLogedIn}) => {
   const onCamraToggle=()=>{
     if (userVideo.current.srcObject) {
       userVideo.current.srcObject.getTracks().forEach( (track)=> {
-        console.log(track.kind,track.enabled);
         if (track.kind === "video") {
           if (track.enabled) {
             // socketRef.current.emit("change", [...userUpdate,{
@@ -161,11 +157,9 @@ const Room = ({name ,setLogedIn}) => {
     }
   }
   const onAudioToggle=()=>{
-    console.log(userVideo.current.srcObject.getTracks());
     if (userVideo.current.srcObject) {
       userVideo.current.srcObject.getTracks().forEach( (track)=> {
         if (track.kind === "audio") {
-          console.log(track.kind,track.enabled);
           if (track.enabled) {
             // socketRef.current.emit("change",[...userUpdate, {
             //   id: socketRef.current.id,
@@ -190,11 +184,8 @@ const Room = ({name ,setLogedIn}) => {
  const shareScreen=()=> {
     navigator.mediaDevices.getDisplayMedia({ cursor: true }).then(stream => {
         const screenTrack = stream.getTracks()[0];
-        console.log("screenTrack",screenTrack);
-        console.log("userVideo.current.srcObject",userVideo.current.srcObject);
         userVideo.current.srcObject.getTracks().forEach(track=>{
           if(track.kind==="video"){
-            console.log(track);
             webcamVideoTrak.current=track;
             track.enabled = true;
             screenTrack.enabled = true;
@@ -234,29 +225,27 @@ const scallVideo = () => {
     setLoding(true);
     if(localStorage.getItem("userAccessToken")){
       let accessToken = localStorage.getItem("userAccessToken");
-      console.log("accessToken",accessToken);
       const options = {
         headers: {
           authorization: `bearer ${JSON.parse(accessToken)}`,
         },
       };
-      axios.get("https://asad-zoom-look-alike-server.herokuapp.com/logout",options).then(response=>{
-      // axios.get("http://localhost:4000/logout",options).then(response=>{
+      // axios.get("https://asad-zoom-look-alike-server.herokuapp.com/logout",options).then(response=>{
+      axios.get("http://localhost:4000/logout",options).then(response=>{
       localStorage.removeItem("userAccessToken")
-      console.log(response.data);
       if(response.data.adminLogedOut){
         socketRef.current.emit("logout all");
       }
       setLoding(false);
       setLogedIn(false);
-      window.location.reload(false);
+      // window.location.reload(false);
       }).catch((error)=>{
         console.log(error);
         setLoding(false);
         
       })
     }else{
-      window.location.reload(false);
+      setLogedIn(false);
     }
   }
   return (

@@ -18,9 +18,8 @@ const Chat=({name})=> {
         socket.emit("user joined",{userName:name,id:socket.id,roomID:"room"})
         socket.emit("get all messages")
         socket.on("all messages",(tempMessages) =>{
-            console.log("tempMessages" ,tempMessages);
             setMessages(prev=>tempMessages)
-            scrollToRef.current.scrollIntoView({ behavior : 'smooth'});
+
         })
         return (
             ()=>{
@@ -28,12 +27,14 @@ const Chat=({name})=> {
             }
         )
     },[])
+    useEffect(() => {
+            scrollToRef.current?.scrollIntoView({ behavior : 'smooth'});
+    },[messages])
 
     const hndleMessage=(e)=>{
     setMessageText(e.target.value);
     }
     const sendMessage =()=>{
-        console.log("chat userName state",name);
         if(messageText){
             socketRef.current.emit("message",{userName:name,message:messageText});
             textRef.current.value=""
@@ -43,18 +44,17 @@ const Chat=({name})=> {
     return (
         <div className="chat">
         <div className="chat-screen">
-            {messages !=[] && messages.map((messageObj)=>{
-                console.log(messageObj.userName,messageObj.message);
-                return <div className="message-container" key={uuidv4()}>
+            {messages !=[] && messages.map((messageObj,i)=>{
+                return <div  className="message-container" key={uuidv4()}>
                     <span className="username">
                         {messageObj.userName}
                     </span> : 
                      <span className="message">
                          {messageObj.message}
                      </span>
+                     {i===messages.length-1?<div ref={scrollToRef} ></div>:""}
                 </div>
             })}
-            <div ref={scrollToRef} ></div>
             </div>
             <input type="text" ref={textRef} onChange={hndleMessage} />
             <input type="button" onClick={sendMessage} value={"send"} className="submitMessage" />
