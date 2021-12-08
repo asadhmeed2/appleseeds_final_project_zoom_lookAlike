@@ -14,6 +14,7 @@ const Chat=({name})=> {
     const scrollToRef=useRef();
     const socketRef = useRef();
     useEffect(() => {
+        console.log("chat name: " + name);
         setUserName(name);
         socketRef.current =socket;
         socket.open();
@@ -35,8 +36,9 @@ const Chat=({name})=> {
     setMessageText(e.target.value);
     }
     const sendMessage =()=>{
+        console.log("chat userName state",name);
         if(messageText){
-            socketRef.current.emit("message",{userName:userName,message:messageText});
+            socketRef.current.emit("message",{userName:name,message:messageText});
             textRef.current.value=""
             setMessageText("") 
         }

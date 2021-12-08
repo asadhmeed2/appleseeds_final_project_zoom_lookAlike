@@ -24,7 +24,7 @@ const Room = ({name ,setLogedIn}) => {
   const peersRef = useRef([]);
 
   useEffect(() => {
-    
+    console.log(name);
     setUserName(name)
     socketRef.current = socket;
     socket.open()
