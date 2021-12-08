@@ -244,8 +244,8 @@ const scallVideo = () => {
         },
       };
       console.log(options);
-      // axios.get("https://asad-zoom-look-alike-server.herokuapp.com/logout",options).then(response=>{
-      axios.get("http://localhost:4000/logout",options).then(response=>{
+      axios.get("https://asad-zoom-look-alike-server.herokuapp.com/logout",options).then(response=>{
+      // axios.get("http://localhost:4000/logout",options).then(response=>{
       localStorage.removeItem("userAccessToken")
       // if(response.data.adminLogedOut){
       //   socketRef.current.emit("logout all");
