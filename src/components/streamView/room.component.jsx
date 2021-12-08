@@ -4,14 +4,13 @@ import Peer from "simple-peer";
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
 import Chat from '../chat/chat.component';
-// import {nanoid} from 'nanoid'
 import Video from "../video/video.component";
-import { useParams } from "react-router-dom";
-import "./room.style.css";
-const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
-// const socket = io("http://localhost:4000", { transports: ["websocket"] });
 
-const Room = ({name}) => {
+import "./room.style.css";
+// const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
+const socket = io("http://localhost:4000", { transports: ["websocket"] });
+
+const Room = ({name ,setLogedIn}) => {
   const navigate =useNavigate();
   const [peers, setPeers] = useState([]);
   const [myVideoFlag, setMyVideoFlag] = useState(true);
@@ -25,13 +24,15 @@ const Room = ({name}) => {
   const peersRef = useRef([]);
 
   useEffect(() => {
+    
     setUserName(name)
     socketRef.current = socket;
     socket.open()
       const options ={
         headers:{'authorization':`bearer ${JSON.parse(localStorage.getItem('userAccessToken'))}` }
       }
-    axios.get("https://asad-zoom-look-alike-server.herokuapp.com/auth",options).then(response => {
+    // axios.get("https://asad-zoom-look-alike-server.herokuapp.com/auth",options).then(response => {
+    axios.get("http://localhost:4000/auth",options).then(response => {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
@@ -84,9 +85,14 @@ const Room = ({name}) => {
           // socketRef.current.on("change", (payload) => {
           //   setUserUpdate(payload);
           // });
+
+          socketRef.current.on("logout",()=>{
+            handleLogout();
+          })
         })
         .catch((err) => {
           console.log(err);
+          navigate('/message')
         });
     }).catch(err => {
       navigate('/')
@@ -224,7 +230,7 @@ const scallVideo = () => {
   userVideo.current.classList.toggle("scalled");
   }
 
-  const handleLogout =()=>{
+  function handleLogout(){
     setLoding(true);
     if(localStorage.getItem("userAccessToken")){
       let accessToken = localStorage.getItem("userAccessToken");
@@ -234,15 +240,23 @@ const scallVideo = () => {
           authorization: `bearer ${JSON.parse(accessToken)}`,
         },
       };
-      axios.get("https://asad-zoom-look-alike-server.herokuapp.com/logout",options).then(response=>{
+      // axios.get("https://asad-zoom-look-alike-server.herokuapp.com/logout",options).then(response=>{
+      axios.get("http://localhost:4000/logout",options).then(response=>{
       localStorage.removeItem("userAccessToken")
       console.log(response.data);
+      if(response.data.adminLogedOut){
+        socketRef.current.emit("logout all");
+      }
       setLoding(false);
+      setLogedIn(false);
       window.location.reload(false);
       }).catch((error)=>{
         console.log(error);
         setLoding(false);
+        
       })
+    }else{
+      window.location.reload(false);
     }
   }
   return (

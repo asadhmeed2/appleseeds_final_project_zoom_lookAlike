@@ -5,7 +5,7 @@ import "./creatRoom.style.css";
 import Room  from "../streamView/room.component"
 
 
-const CreateRoom = ({user}) => {
+const CreateRoom = ({user ,setLogedIn}) => {
 
    const [username, setUsername] = useState("");
   const messageRef=useRef();
@@ -24,8 +24,9 @@ const CreateRoom = ({user}) => {
       },
     };
     axios
-      .get("https://asad-zoom-look-alike-server.herokuapp.com/auth", options)
-      .then((response) => {
+    // .get("https://asad-zoom-look-alike-server.herokuapp.com/auth", options)
+    .get("http://localhost:4000/auth", options)
+    .then((response) => {
         setRoomJoined(true);
       }
       ).catch((error) => {
@@ -33,7 +34,8 @@ const CreateRoom = ({user}) => {
       })
   };
  const onInputUserName=(e)=>{
-  setUsername(e.target.value)
+   setUsername(e.target.value)
+   console.log(username);
  }
 
 
@@ -45,7 +47,7 @@ const CreateRoom = ({user}) => {
       </div>
       <div className="room-containr">
       {
-        roomJoined?<><Room name={username} user={user}/></>:
+        roomJoined?<><Room name={username} user={user} setLogedIn={setLogedIn}/></>:
         <div className="room-userName">
           <input type="text" onFocus={() => {messageRef.current.innerHTML =""}} value={username} onChange={onInputUserName}/>
           <button onClick={join}>Join Room</button>

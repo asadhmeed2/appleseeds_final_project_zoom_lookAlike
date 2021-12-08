@@ -14,8 +14,12 @@ const Home = () => {
   const login = async (email, password) => {
     try {
       setLoding(true);
+      // const loginData = await axios.post(
+      //   "https://asad-zoom-look-alike-server.herokuapp.com/login",
+      //   { email: email, password: password }
+      //   );
       const loginData = await axios.post(
-        "https://asad-zoom-look-alike-server.herokuapp.com/login",
+        "http://localhost:4000/login",
         { email: email, password: password }
       );
       localStorage.setItem(
@@ -44,7 +48,8 @@ const Home = () => {
         };
         axios
           .get(
-            "https://asad-zoom-look-alike-server.herokuapp.com/auth",
+            // "https://asad-zoom-look-alike-server.herokuapp.com/auth",
+            "http://localhost:4000/auth",
             options
           )
           .then((response) => {
@@ -69,10 +74,10 @@ const Home = () => {
          <LinearProgress />
        </Box>
       ) : !logedIn ? (
-        <Login logding={loding} logIn={login} />
+        <Login logding={loding} logIn={login}  />
       ) : (
         <>
-          <CreateRoom user={user} />
+          <CreateRoom user={user} setLogedIn={setLogedIn}/>
         </>
       )}
     </div>

@@ -1,9 +1,8 @@
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
-import axios from 'axios'
-import {useState} from 'react'
 import './App.css';
-import Room from './components/streamView/room.component';
+
 import Home from './components/home/home.component';
+import Message from './components/message/message.component';
 
 
 
@@ -14,7 +13,7 @@ function App() {
     <div className="App">
       <Routes>
       <Route path="/" element={<Home/>}/>
-      {/* <Route path="/room/:roomId" element={<Room user={user}/>}/> */}
+      <Route path="/message" element={<Message/>}/>
         </Routes>
     </div>
     </Router>
