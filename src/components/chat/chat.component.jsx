@@ -9,13 +9,10 @@ const socket = io("https://asad-zoom-look-alike-chat-serv.herokuapp.com/", { tra
 const Chat=({name})=> {
     const [messages,setMessages] =useState([])
     const [messageText,setMessageText]=useState("")
-    const [userName,setUserName]=useState("")
     const textRef=useRef()
     const scrollToRef=useRef();
     const socketRef = useRef();
     useEffect(() => {
-        console.log("chat name: " + name);
-        setUserName(name);
         socketRef.current =socket;
         socket.open();
         socket.emit("user joined",{userName:name,id:socket.id,roomID:"room"})
