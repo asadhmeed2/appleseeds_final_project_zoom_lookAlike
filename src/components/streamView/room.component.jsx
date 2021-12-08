@@ -31,8 +31,8 @@ const Room = ({name ,setLogedIn}) => {
       const options ={
         headers:{'authorization':`bearer ${JSON.parse(localStorage.getItem('userAccessToken'))}` }
       }
-    // axios.get("https://asad-zoom-look-alike-server.herokuapp.com/auth",options).then(response => {
-    axios.get("http://localhost:4000/auth",options).then(response => {
+    axios.get("https://asad-zoom-look-alike-server.herokuapp.com/auth",options).then(response => {
+    // axios.get("http://localhost:4000/auth",options).then(response => {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
@@ -240,8 +240,8 @@ const scallVideo = () => {
           authorization: `bearer ${JSON.parse(accessToken)}`,
         },
       };
-      // axios.get("https://asad-zoom-look-alike-server.herokuapp.com/logout",options).then(response=>{
-      axios.get("http://localhost:4000/logout",options).then(response=>{
+      axios.get("https://asad-zoom-look-alike-server.herokuapp.com/logout",options).then(response=>{
+      // axios.get("http://localhost:4000/logout",options).then(response=>{
       localStorage.removeItem("userAccessToken")
       console.log(response.data);
       if(response.data.adminLogedOut){

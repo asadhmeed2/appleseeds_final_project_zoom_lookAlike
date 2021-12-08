@@ -14,14 +14,14 @@ const Home = () => {
   const login = async (email, password) => {
     try {
       setLoding(true);
-      // const loginData = await axios.post(
-      //   "https://asad-zoom-look-alike-server.herokuapp.com/login",
-      //   { email: email, password: password }
-      //   );
       const loginData = await axios.post(
-        "http://localhost:4000/login",
+        "https://asad-zoom-look-alike-server.herokuapp.com/login",
         { email: email, password: password }
-      );
+        );
+      // const loginData = await axios.post(
+      //   "http://localhost:4000/login",
+      //   { email: email, password: password }
+      // );
       localStorage.setItem(
         "userAccessToken",
         JSON.stringify(loginData.data.accessToken)
@@ -48,8 +48,8 @@ const Home = () => {
         };
         axios
           .get(
-            // "https://asad-zoom-look-alike-server.herokuapp.com/auth",
-            "http://localhost:4000/auth",
+            "https://asad-zoom-look-alike-server.herokuapp.com/auth",
+            // "http://localhost:4000/auth",
             options
           )
           .then((response) => {
