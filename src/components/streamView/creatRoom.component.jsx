@@ -45,10 +45,13 @@ const CreateRoom = ({user ,setLogedIn}) => {
       <div className="room-containr">
       {
         roomJoined?<><Room name={username} user={user} setLogedIn={setLogedIn}/></>:
+        <div className="room-userName-container">
         <div className="room-userName">
-          <input type="text" onFocus={() => {messageRef.current.innerHTML =""}} value={username} onChange={onInputUserName}/>
-          <button onClick={join}>Join Room</button>
-          <div ref={messageRef} className="message"></div>
+          <h1>wellcome to my video chat</h1>
+          <input type="text" className="userName-input" onFocus={() => {messageRef.current.innerHTML =""}} value={username} onChange={onInputUserName}/>
+          <button onClick={join} className="joinRoom-btn">Join Room</button>
+          <div ref={messageRef} className="username-message-error"></div>
+        </div>
         </div>
       }
       </div>

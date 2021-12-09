@@ -14,6 +14,8 @@ import StopScreenShareIcon from '@mui/icons-material/StopScreenShare';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ChatIcon from '@mui/icons-material/Chat';
+import CloseIcon from '@mui/icons-material/Close';
 import "./room.style.css";
 const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
 // const socket = io("http://localhost:4000", { transports: ["websocket"] });
@@ -26,7 +28,8 @@ const Room = ({name ,setLogedIn}) => {
   const [myVideoFlag, setMyVideoFlag] = useState(true);
   const [myAudioFlag, setMyAudioFlag] = useState(true);
   const [loding, setLoding] = useState(false);
-  const [userName, setUserName] = useState()
+  const [chatIsVisible, setChatIsVisible] = useState(false);
+  const [userName, setUserName] = useState();
   const socketRef = useRef();
   const userVideo = useRef();
   const webcamVideoTrak= useRef()
@@ -262,6 +265,10 @@ const scallVideo = () => {
       setLogedIn(false);
     }
   }
+
+  const openChat=()=>{
+    setChatIsVisible(!chatIsVisible)
+  }
   return (
    <div className="room">
     <div className="body">
@@ -276,18 +283,24 @@ const scallVideo = () => {
     </div>
       <div className="room-footer">
       <div className="left-footer">
-      <button  className=""   onClick={()=>{onAudioToggle()}}>{myAudioFlag?<MicIcon/>:<MicOffIcon/>}</button>
-      <button className=""   onClick={()=>{onCamraToggle()}}>{myVideoFlag?<VideocamIcon/>:<VideocamOffIcon/>}</button>
+      <button  className="media-btn"   onClick={()=>{onAudioToggle()}}>{myAudioFlag?<><MicIcon/><div className="media-btn-text">Mute</div></>:<><MicOffIcon/><div className="media-btn-text">Unmute</div></>}</button>
+      <button className="media-btn"   onClick={()=>{onCamraToggle()}}>{myVideoFlag?<><VideocamIcon/><div className="media-btn-text">Stop Video</div></>:<><VideocamOffIcon/><div className="media-btn-text">Start Video</div></>}</button>
       </div>
       <div className="middle-footer">
-      <button  className=""  onClick={()=>{shareScreen()}}> {shareScreenFlag?<ScreenShareIcon/>:<StopScreenShareIcon/>}</button>
+      <button  className="media-btn"  onClick={()=>{openChat()}}> <>{<ChatIcon/>}<div className="media-btn-text">Chat</div></></button>
+      <button  className="media-btn"  onClick={()=>{shareScreen()}}> <>{shareScreenFlag?<><ScreenShareIcon/></>:<StopScreenShareIcon/>}<div className="media-btn-text">Shere Screen</div></></button>
       </div>
       <div className="right-footer">
-      <button className="log-out" disabled={loding} onClick={handleLogout}><LogoutIcon/></button>
+      <button className="media-btn"  disabled={loding} onClick={handleLogout}><><LogoutIcon/><div className="media-btn-text">Logout</div></></button>
       </div>
       </div>
     </div>
+      <div className="chat-window" style={{display:chatIsVisible?"":"none"}}>
+        <div className="chat-wrapper">
+      <button  className="media-btn chat-close-btn"  onClick={()=>{openChat()}}> <>{<CloseIcon/>}<div className="media-btn-text">close</div></></button>
       <Chat name={userName}/>
+        </div>
+      </div>
     </div>
   );
 };

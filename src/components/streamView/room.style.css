@@ -1,20 +1,17 @@
 .container {
-  /* display: grid;
-  grid-template-columns: repeat(auto-fill,500px);
-  grid-template-rows: 300px; */
   display: flex;
   flex-wrap: wrap;
   gap: 3px;
-  height: 100vmin;
-  width:86vw;
+  height: 93.4vmin;
+  width:100vw;
   gap: 15px;
   overflow:scroll;
   padding:15px;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
-  border: solid 20px #ccc;
   position: relative;
   box-sizing: border-box;
+  justify-content: center;
 }
 .scall{
  position: absolute;
@@ -33,12 +30,12 @@
   display: none;
 }
 .scalled{
-  width: 70vw;
-  height: 70vh;
+  width: 98vw;
+  height: 90vh;
 }
  video {
-  height: 300px;
-  width: 500px;
+  height: 20vmax;
+  width: 35vmax;
   object-fit: cover;
   border: solid 4px #333;
   border-radius:5px;
@@ -53,21 +50,22 @@
   align-items: center;
   height: 60px;
   justify-self: flex-end;
-  width:100%;
-  background: black;
+  width:100vw;
+  background: rgba(180, 164, 164,0.5);
+  box-sizing: border-box;
+  
+
 }
 .room{
   display: flex;
-  width: 100vw;
-  height: 100vh;
+  
+  
   justify-content:space-around;
   
 }
 .body{
   display: flex;
   flex-direction: column;
-  width: 87vw;
-  height: 100vh;
 }
 
 .log-out{
@@ -82,10 +80,40 @@
 .left-footer{
 display: flex;
 align-items: center;
-gap: 10px;
+
+
 }
 .log-out{
   display: flex;
   justify-content:center;
   align-items: center;
+}
+.media-btn{
+  height:3.2vmax;
+  width:4.5vmax;
+  background:transparent ;
+  border: none;
+  border-radius: 8px;
+  transition:all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.media-btn:hover{
+  background:#ccc;
+}
+.media-btn-text{ 
+  font-size:12px
+}
+.chat-window{
+  position: absolute;
+  width: 98vw;
+  height: 95vh;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+}
+.chat-wrapper{
+  background: whitesmoke;
+  padding: 10px;
+  border-radius: 10px;
+  
 }

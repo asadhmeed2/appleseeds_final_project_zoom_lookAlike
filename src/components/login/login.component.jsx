@@ -1,5 +1,6 @@
 import React from "react";
 import {Link} from 'react-router-dom';
+import "./login.style.css"
 import {
   Grid,
   TextField,
@@ -20,8 +21,8 @@ const LoginPage = ({loding,logIn}) => {
          logIn(email,password);
     }
   return (
-    <div style={{ padding: 30 }}>
-      <Paper >
+    <div style={{ padding: 30 }} className="login-page">
+      <Paper className="login-paper" >
         <Grid
           container
           spacing={3}
@@ -39,7 +40,7 @@ const LoginPage = ({loding,logIn}) => {
               <div className="error" ref={errorRef}></div>
           </Grid>
           <Grid item xs={12}>
-            <Button disabled={loding} fullWidth onClick={handleLogin}> Login </Button>
+            <Button  className="login-btn" disabled={loding} fullWidth onClick={handleLogin}> Login </Button>
           </Grid>
           <Grid item xs={12}>
             <p> dont have an account <Link to={"/register"} className="register-link">Register</Link> </p>

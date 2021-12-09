@@ -1,8 +1,8 @@
 .chat-screen{
-    height: 94vh;
+    height: 50vh;
     overflow: scroll;
     overflow-x: hidden;
-    width: 14vw;
+    width: 20vw;
     background: rgb(168, 163, 163);
     margin-bottom: 13px;
     line-height: 1.5rem;

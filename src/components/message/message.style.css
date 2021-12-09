@@ -1,5 +1,28 @@
-.message-container{
+.message-error-container{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100vw;
+    height: 100vh;
+    font-size:30px;
+}
+.message-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5vmax;
+    background: whitesmoke;
+    border-radius: 15px;
+}
+.home-btn{
+    background: transparent ;
+    cursor: pointer;
+    border: none;
+    border-radius: 15%;
+    background:rgba(218, 206, 206,0.5);
+}
+.home-btn:hover{
+    background: rgba(218, 206, 206,0.7);
 }

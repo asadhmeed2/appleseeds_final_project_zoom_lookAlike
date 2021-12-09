@@ -1,0 +1,13 @@
+.login-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+.login-paper{
+    padding: 5vmax;
+    background: whitesmoke;
+}
+.login-btn{
+    background: greenyellow;
+}

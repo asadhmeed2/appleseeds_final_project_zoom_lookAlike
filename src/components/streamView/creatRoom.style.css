@@ -8,3 +8,44 @@
 ul{
     list-style: none;
 }
+.room-userName-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    width: 100vw;
+    height: 100vh;
+}
+.room-userName{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5vh;
+    background: whitesmoke;
+    padding: 5vmax;
+    border-radius:15px;
+}
+.userName-input{
+    padding: 0.5vmax;
+    border-radius:10px;
+    font-size:18px;
+}
+.joinRoom-btn{
+    padding: 0.5vmax;
+    border: none;
+    background :rgb(194, 193, 193);
+    cursor: pointer;
+    transition: all 500ms ease-in-out;
+    border-radius: 10px;
+}
+.joinRoom-btn:hover{
+    
+    background:gray;
+}
+.username-message-error{
+    width: 100%;
+    height: 20px;
+    color:red;
+}
