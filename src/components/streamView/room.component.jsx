@@ -93,16 +93,16 @@ const Room = ({name ,setLogedIn}) => {
           //   setUserUpdate(payload);
           // });
 
-          socketRef.current.on("logout",()=>{
-            handleLogout();
-          })
+          // socketRef.current.on("logout",()=>{
+          //   handleLogout();
+          // })
         })
         .catch((err) => {
           console.log(err);
-          navigate('/message')
+          navigate('/message/cannot-get-to-your-webcame')
         });
     }).catch(err => {
-      navigate('/')
+      navigate('/message/admin-is-not-loged-in')
     })
     return function cleanup() {
       
