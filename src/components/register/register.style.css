@@ -1,0 +1,11 @@
+.register-container{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+.register{
+    width: 50vw;
+    height: 60vh;
+}
