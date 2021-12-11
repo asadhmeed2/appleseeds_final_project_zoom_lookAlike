@@ -67,6 +67,7 @@ const Home = () => {
         setLoding(false);
     }
   }, []);
+  
   return (
     <div>
       {loding ? (
