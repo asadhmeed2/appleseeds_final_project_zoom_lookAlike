@@ -35,6 +35,7 @@ const Room = ({name ,setLogedIn}) => {
   const webcamVideoTrak= useRef()
   const userStream = useRef()
   const peersRef = useRef([]);
+  const videoContainerRef = useRef();
 
   useEffect(() => {
     setUserName(name)
@@ -233,6 +234,7 @@ const Room = ({name ,setLogedIn}) => {
 }
 const scallVideo = () => {
   userVideo.current.classList.toggle("scalled");
+  videoContainerRef.current.classList.toggle("rotate");
   setFullScreenFlag(!fullScreenFlag)
   }
 
@@ -273,7 +275,7 @@ const scallVideo = () => {
    <div className="room">
     <div className="body">
     <div className="container">
-    <div  className="video-container">
+    <div  className="video-container" ref={videoContainerRef}>
       <button onClick={scallVideo} className="scall" >{fullScreenFlag? <FullscreenExitIcon/>:<FullscreenIcon /> }</button>
       <video muted ref={userVideo}  autoPlay playsInline />
       </div>

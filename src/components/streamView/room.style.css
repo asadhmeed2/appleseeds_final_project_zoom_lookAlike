@@ -1,8 +1,7 @@
 .container {
   display: flex;
   flex-wrap: wrap;
-  gap: 3px;
-  height: 93.4vmin;
+  height: 93vh;
   width:100vw;
   gap: 15px;
   overflow:scroll;
@@ -43,25 +42,21 @@
 } 
 .video-container{
   position: relative;
+  height: fit-content;
 }
 .room-footer{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
+  height:55px;
   justify-self: flex-end;
   width:100vw;
   background: rgba(180, 164, 164,0.5);
   box-sizing: border-box;
-  
-
 }
 .room{
   display: flex;
-  
-  
   justify-content:space-around;
-  
 }
 .body{
   display: flex;
@@ -89,8 +84,8 @@ align-items: center;
   align-items: center;
 }
 .media-btn{
-  height:3.2vmax;
-  width:4.5vmax;
+  height:55px;
+  width:100px;
   background:transparent ;
   border: none;
   border-radius: 8px;
@@ -101,7 +96,7 @@ align-items: center;
   background:#ccc;
 }
 .media-btn-text{ 
-  font-size:12px
+  font-size:0.8rem
 }
 .chat-window{
   position: absolute;
@@ -115,5 +110,31 @@ align-items: center;
   background: whitesmoke;
   padding: 10px;
   border-radius: 10px;
+  
+}
+@media only screen and (max-width: 600px) {
+  .media-btn-text{ 
+    display:none;
+  }
+  .media-btn{
+    width:55px;
+  }
+  .scalled{
+    width: 90vh;
+    height: 98vw;
+  }
+  .rotate{
+    transform: rotate(90deg) ;
+    position: absolute;
+    bottom:1;
+    top: 18vh;
+    right: 1;
+    left: 1;
+    z-index: 100;
+  }
+ 
+  .container{
+    position: relative;
+  }
   
 }

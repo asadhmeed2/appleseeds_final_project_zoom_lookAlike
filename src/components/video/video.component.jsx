@@ -6,6 +6,7 @@ const Video = (props) => {
     const [shareScreenFlag, setShareScreenFlag] = useState(false);
     const ref = useRef();
     const videoContainer = useRef();
+    
     useEffect(() => {
         props.peer.on("stream", stream => {
             if(ref.current){
@@ -15,6 +16,7 @@ const Video = (props) => {
     }, []);
     const scallVideo = () => {
         ref.current.classList.toggle("scalled");
+        videoContainer.current.classList.toggle("rotate");
         setShareScreenFlag(!shareScreenFlag);
     }
     return (
