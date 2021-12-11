@@ -125,7 +125,7 @@ const Room = ({name ,setLogedIn}) => {
         });
     }).catch(err => {
       console.log(err.data);
-      navigate('/message/admin-is-not-loged-in')
+      // navigate('/message/admin-is-not-loged-in')
     })
     return function cleanup() {
       
