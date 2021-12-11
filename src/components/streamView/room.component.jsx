@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState ,useLayoutEffect} from "react";
 import { io } from "socket.io-client";
 import Peer from "simple-peer";
 import axios from 'axios';
@@ -20,6 +20,23 @@ import "./room.style.css";
 const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", { transports: ["websocket"] });
 // const socket = io("http://localhost:4000", { transports: ["websocket"] });
 
+
+
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return size;
+}
+
+
+
 const Room = ({name ,setLogedIn}) => {
   const navigate =useNavigate();
   const [peers, setPeers] = useState([]);
@@ -36,6 +53,7 @@ const Room = ({name ,setLogedIn}) => {
   const userStream = useRef()
   const peersRef = useRef([]);
   const videoContainerRef = useRef();
+  const [width, height] = useWindowSize()
 
   useEffect(() => {
     setUserName(name)
@@ -115,7 +133,6 @@ const Room = ({name ,setLogedIn}) => {
       socket.close();
     }
   }, []);
-
   function createPeer(userToSignal, callerID, stream) {
     const peer = new Peer({
       initiator: true,
@@ -273,6 +290,7 @@ const scallVideo = () => {
   }
   return (
    <div className="room">
+     {console.log(width,height)}
     <div className="body">
     <div className="container">
     <div  className="video-container" ref={videoContainerRef}>
@@ -290,7 +308,7 @@ const scallVideo = () => {
       </div>
       <div className="middle-footer">
       <button  className="media-btn"  onClick={()=>{openChat()}}> <>{<ChatIcon/>}<div className="media-btn-text">Chat</div></></button>
-      <button  className="media-btn"  onClick={()=>{shareScreen()}}> <>{shareScreenFlag?<><ScreenShareIcon/></>:<StopScreenShareIcon/>}<div className="media-btn-text">Shere Screen</div></></button>
+      {width>600 && <button  className="media-btn share-screen-btn"  onClick={()=>{shareScreen()}}> <>{shareScreenFlag?<><ScreenShareIcon/></>:<StopScreenShareIcon/>}<div className="media-btn-text">Shere Screen</div></></button>}
       </div>
       <div className="right-footer">
       <button className="media-btn"  disabled={loding} onClick={handleLogout}><><LogoutIcon/><div className="media-btn-text">Logout</div></></button>
