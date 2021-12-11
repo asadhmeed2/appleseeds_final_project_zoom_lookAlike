@@ -124,6 +124,7 @@ const Room = ({name ,setLogedIn}) => {
           navigate('/message/cannot-get-to-your-webcame')
         });
     }).catch(err => {
+      console.log(err.data);
       navigate('/message/admin-is-not-loged-in')
     })
     return function cleanup() {
@@ -278,7 +279,8 @@ const scallVideo = () => {
       }).catch((error)=>{
         console.log(error);
         setLoding(false);
-        
+        localStorage.removeItem("userAccessToken")
+        setLogedIn(false);
       })
     }else{
       setLogedIn(false);

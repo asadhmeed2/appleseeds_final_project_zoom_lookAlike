@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import './register.style.css';
+import "./register.style.css";
 import { Grid, TextField, Paper, Button } from "@material-ui/core";
 import axios from "axios";
 const Register = () => {
@@ -60,7 +60,7 @@ const Register = () => {
   };
   return (
     <div className="register-container">
-      <div style={{ padding: 30 }} >
+      <div style={{ padding: 30 }}>
         <Paper className="register">
           <Grid
             container
