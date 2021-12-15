@@ -9,7 +9,7 @@ with normal chat
 ### frontend :
 react , socket.io-client ,simple-peer
 ### backend :
-nodeJS, Express, socket.io, MongoDB 
+nodeJS, Express, socket.io, MongoDB .
 the backend is tow servers main one and chat server
 
 #### links to servers repositories
