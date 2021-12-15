@@ -11,13 +11,15 @@ react , socket.io-client ,simple-peer
 ### backend :
 nodeJS, Express, socket.io, MongoDB.
 
-the backend is tow servers main one and chat server
+the backend is two servers main one and chat server
 
-#### links to servers repositories
+#### links to servers github repositories
 
 [main server](https://github.com/newasad/appleseeds_final_project_zoom_lookAlike-mainServer)
 
 [chat server](https://github.com/newasad/appleseeds_final_project_zoom_lookAlike-chatServer)
+
+
 
 
 
