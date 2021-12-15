@@ -14,8 +14,9 @@ the backend is tow servers main one and chat server
 
 #### links to servers repositories
 
-[a link](https://github.com/newasad/appleseeds_final_project_zoom_lookAlike-mainServer)
+[main server](https://github.com/newasad/appleseeds_final_project_zoom_lookAlike-mainServer)
 
+[chat server](https://github.com/newasad/appleseeds_final_project_zoom_lookAlike-chatServer)
 
 
 
