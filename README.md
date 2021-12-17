@@ -1,7 +1,7 @@
-# grope video chat web app
+# group video chat web app
 
 ## Decription
-a web application for private grope video chat with screen ,webcame video and microphone audio share capability,   
+a web application for private group video chat with screen ,webcam video and microphone audio share capability,   
 with normal chat
 
 ## Technologies
