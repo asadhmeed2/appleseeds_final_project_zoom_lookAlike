@@ -1,6 +1,6 @@
 # group video chat web app
 
-## Decription
+## Description
 a web application for private group video chat with screen ,webcam video and microphone audio share capability,   
 with normal chat
 
