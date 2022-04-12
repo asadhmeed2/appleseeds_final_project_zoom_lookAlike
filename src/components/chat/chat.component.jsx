@@ -55,7 +55,7 @@ const Chat=({name})=> {
     return (
         <div className="chat">
         <div className="chat-screen">
-            {messages !=[] && messages.map((messageObj,i)=>{
+            {messages !== [] && messages.map((messageObj,i)=>{
                 return <div  className="message-container" key={uuidv4()}>
                     <span className="username">
                         {messageObj.userName}
