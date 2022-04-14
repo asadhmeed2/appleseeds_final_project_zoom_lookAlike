@@ -8,12 +8,5 @@ module.exports = function override (config, env) {
       os: require.resolve('os-browserify'),
       url: require.resolve('url')
     })
-    config.plugins = (config.plugins || []).concat([
-      // eslint-disable-next-line no-undef
-      new webpack.ProvidePlugin({
-        process: 'process/browser',
-        Buffer: ['buffer', 'Buffer']
-      })
-    ])
     return config
   }
