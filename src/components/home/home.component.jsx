@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import "./home.style.css";
-import LinearProgress from "@mui/material/LinearProgress";
-import Box from "@mui/material/Box";
+// import LinearProgress from "@mui/material/LinearProgress";
+// import Box from "@mui/material/Box";
 
 import CreateRoom from "../streamView/creatRoom.component";
-import Login from "../login/login.component";
+// import Login from "../login/login.component";
 
 const Home = () => {
   const [logedIn, setLogedIn] = useState(false);

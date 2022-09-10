@@ -17,10 +17,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ChatIcon from "@mui/icons-material/Chat";
 import CloseIcon from "@mui/icons-material/Close";
 import "./room.style.css";
-const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", {
+// const socket = io("https://asad-zoom-look-alike-server.herokuapp.com/", {
+//   transports: ["websocket"],
+// });
+const socket = io(process.env.REACT_APP_SREVER_URL, {
   transports: ["websocket"],
 });
-// const socket = io("http://localhost:4000", { transports: ["websocket"] });
 
 function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
@@ -70,7 +72,7 @@ const Room = ({ name, setLogedIn }) => {
         socketRef.current.emit("join room", {
           roomID: "roomID",
           // uniqueID: response.data.uniqid,
-          uniqueID: "laksdfoasoiweha1peoiofj",
+          uniqueID: socket.id,
         });
         socketRef.current.on("all users", (users) => {
           const peers = [];
@@ -122,7 +124,7 @@ const Room = ({ name, setLogedIn }) => {
       })
       .catch((err) => {
         console.log(err);
-        navigate("/message/cannot-get-to-your-webcame");
+        // navigate("/message/cannot-get-to-your-webcame");
       });
     // }).catch(err => {
     //   console.log(err.data);
@@ -222,7 +224,7 @@ const Room = ({ name, setLogedIn }) => {
           track.enabled = true;
           screenTrack.enabled = true;
           let tempPeers = [...peers];
-          tempPeers.map((peer) => {
+          tempPeers?.map((peer) => {
             peer.peer.replaceTrack(track, screenTrack, userStream.current);
           });
           setShareScreenFlag(true);
@@ -235,7 +237,7 @@ const Room = ({ name, setLogedIn }) => {
             webcamVideoTrak.current.enabled = false;
             track.enabled = true;
             let tempPeers = [...peers];
-            tempPeers.map((peer) => {
+            tempPeers?.map((peer) => {
               peer.peer.replaceTrack(
                 webcamVideoTrak.current,
                 track,
@@ -255,42 +257,42 @@ const Room = ({ name, setLogedIn }) => {
     setFullScreenFlag(!fullScreenFlag);
   };
 
-  function handleLogout() {
-    setLoding(true);
-    if (localStorage.getItem("userAccessToken")) {
-      let accessToken = localStorage.getItem("userAccessToken");
-      console.log(accessToken);
-      const options = {
-        headers: {
-          authorization: `bearer ${JSON.parse(accessToken)}`,
-        },
-      };
-      console.log(options);
-      axios
-        .get(
-          "https://asad-zoom-look-alike-server.herokuapp.com/logout",
-          options
-        )
-        .then((response) => {
-          // axios.get("http://localhost:4000/logout",options).then(response=>{
-          localStorage.removeItem("userAccessToken");
-          // if(response.data.adminLogedOut){
-          //   socketRef.current.emit("logout all");
-          // }
-          setLoding(false);
-          setLogedIn(false);
-          // window.location.reload(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setLoding(false);
-          localStorage.removeItem("userAccessToken");
-          setLogedIn(false);
-        });
-    } else {
-      setLogedIn(false);
-    }
-  }
+  // function handleLogout() {
+  //   setLoding(true);
+  //   if (localStorage.getItem("userAccessToken")) {
+  //     let accessToken = localStorage.getItem("userAccessToken");
+  //     console.log(accessToken);
+  //     const options = {
+  //       headers: {
+  //         authorization: `bearer ${JSON.parse(accessToken)}`,
+  //       },
+  //     };
+  //     console.log(options);
+  //     axios
+  //       .get(
+  //         "https://asad-zoom-look-alike-server.herokuapp.com/logout",
+  //         options
+  //       )
+  //       .then((response) => {
+  //         // axios.get("http://localhost:4000/logout",options).then(response=>{
+  //         localStorage.removeItem("userAccessToken");
+  //         // if(response.data.adminLogedOut){
+  //         //   socketRef.current.emit("logout all");
+  //         // }
+  //         setLoding(false);
+  //         setLogedIn(false);
+  //         // window.location.reload(false);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         setLoding(false);
+  //         localStorage.removeItem("userAccessToken");
+  //         setLogedIn(false);
+  //       });
+  //   } else {
+  //     setLogedIn(false);
+  //   }
+  // }
 
   const openChat = () => {
     setChatIsVisible(!chatIsVisible);
@@ -306,7 +308,7 @@ const Room = ({ name, setLogedIn }) => {
             </button>
             <video muted ref={userVideo} autoPlay playsInline />
           </div>
-          {peers.map((peer) => {
+          {peers?.map((peer) => {
             return <Video key={peer.peerID} peer={peer.peer} />;
           })}
         </div>
@@ -387,7 +389,7 @@ const Room = ({ name, setLogedIn }) => {
             <button
               className="media-btn"
               disabled={loding}
-              onClick={handleLogout}
+              // onClick={handleLogout}
             >
               <>
                 <LogoutIcon />
