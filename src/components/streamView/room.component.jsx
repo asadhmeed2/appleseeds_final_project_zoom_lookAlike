@@ -88,7 +88,6 @@ const Room = ({ name, setLogedIn }) => {
             });
           });
           setPeers((prev) => peers);
-          console.log(peers);
         });
 
         socketRef.current.on("user joined", (payload) => {
@@ -136,7 +135,7 @@ const Room = ({ name, setLogedIn }) => {
       setPeers([]);
       socket.close();
     };
-  }, []);
+  }, [myVideoFlag, name]);
   function createPeer(userToSignal, callerID, stream) {
     const peer = new Peer({
       initiator: true,
