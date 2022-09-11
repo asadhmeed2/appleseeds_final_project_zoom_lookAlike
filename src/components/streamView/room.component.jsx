@@ -88,6 +88,7 @@ const Room = ({ name, setLogedIn }) => {
             });
           });
           setPeers((prev) => peers);
+          console.log(peers);
         });
 
         socketRef.current.on("user joined", (payload) => {
@@ -132,10 +133,10 @@ const Room = ({ name, setLogedIn }) => {
     // })
     return function cleanup() {
       peersRef.current = [];
-      setPeers({});
+      setPeers([]);
       socket.close();
     };
-  }, [myVideoFlag, name]);
+  }, []);
   function createPeer(userToSignal, callerID, stream) {
     const peer = new Peer({
       initiator: true,
@@ -299,7 +300,6 @@ const Room = ({ name, setLogedIn }) => {
   };
   return (
     <div className="room">
-      {console.log(width, height)}
       <div className="body">
         <div className="container">
           <div className="video-container" ref={videoContainerRef}>
@@ -311,6 +311,7 @@ const Room = ({ name, setLogedIn }) => {
           {/* {peers?.map((peer) => (
             <Video key={peer.peerID} peer={peer.peer} />
           ))} */}
+          {console.log(peers)}
         </div>
         <div className="room-footer">
           <div className="left-footer">
