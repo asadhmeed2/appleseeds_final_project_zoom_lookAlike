@@ -135,7 +135,7 @@ const Room = ({ name, setLogedIn }) => {
       setPeers({});
       socket.close();
     };
-  }, []);
+  }, [myVideoFlag, name]);
   function createPeer(userToSignal, callerID, stream) {
     const peer = new Peer({
       initiator: true,
