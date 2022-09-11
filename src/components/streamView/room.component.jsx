@@ -224,9 +224,9 @@ const Room = ({ name, setLogedIn }) => {
           track.enabled = true;
           screenTrack.enabled = true;
           let tempPeers = [...peers];
-          tempPeers?.map((peer) => {
-            peer.peer.replaceTrack(track, screenTrack, userStream.current);
-          });
+          tempPeers?.map((peer) =>
+            peer.peer.replaceTrack(track, screenTrack, userStream.current)
+          );
           setShareScreenFlag(true);
           setPeers(tempPeers);
         }
@@ -308,9 +308,9 @@ const Room = ({ name, setLogedIn }) => {
             </button>
             <video muted ref={userVideo} autoPlay playsInline />
           </div>
-          {peers?.map((peer) => {
-            return <Video key={peer.peerID} peer={peer.peer} />;
-          })}
+          {/* {peers?.map((peer) => (
+            <Video key={peer.peerID} peer={peer.peer} />
+          ))} */}
         </div>
         <div className="room-footer">
           <div className="left-footer">
