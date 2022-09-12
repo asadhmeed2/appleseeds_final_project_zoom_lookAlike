@@ -166,6 +166,7 @@ const Room = ({ name, setLogedIn }) => {
     return peer;
   }
   const onCamraToggle = () => {
+    console.log(userVideo.current);
     if (userVideo.current.srcObject) {
       userVideo.current.srcObject.getTracks().forEach((track) => {
         if (track.kind === "video") {
